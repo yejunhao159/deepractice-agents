@@ -1,0 +1,1063 @@
+# 第五章 基于低代码平台的智能体搭建
+
+在前一章中，通过编写 Python 代码，从零开始实现了 ReAct、Plan-and-Solve 和 Reflection 多种经典的智能体工作流。这个过程为我们打下了坚实的技术基础，让我们深刻理解了智能体内部的运作机理。然而，对于一个快速发展的领域而言，纯代码的开发模式并非总是最高效的选择，尤其是在需要快速验证想法、或者非专业开发者希望参与构建的场景中。
+
+## 5.1 平台化构建的兴起
+
+随着技术的成熟，我们看到越来越多的能力正在被“平台化”。正如网站的开发从手写 HTML/CSS/JS，演进到了可以使用 WordPress、Wix 等建站平台一样，智能体的构建也迎来了平台化的浪潮。本章将聚焦于如何利用图形化、模块化的低代码平台，来快速、直观地搭建、调试和部署智能体应用，将我们的重心从“实现细节”转向“业务逻辑”。
+
+### 5.1.1 为何需要低代码平台
+
+“重复造轮子”对于深入学习至关重要，但在追求工程效率和创新的实战中，我们往往需要站在巨人的肩膀上。尽管我们在第四章中封装了可复用的 `ReActAgent`、`PlanAndSolveAgent` 等类，但当业务逻辑变得复杂时，纯代码的维护成本和开发周期会急剧上升。低代码平台的出现，正是为了解决这些痛点。
+
+其核心价值主要体现在以下几个方面：
+
+1. <strong>降低技术门槛</strong>：低代码平台将复杂的技术细节（如 API 调用、状态管理、并发控制）封装成一个个易于理解的“节点”或“模块”。用户无需精通编程，只需通过拖拽、连接这些节点，就能构建出功能强大的工作流。这使得产品经理、设计师、业务专家等非技术人员也能参与到智能体的设计与创造中来，极大地拓宽了创新的边界。
+2. <strong>提升开发效率</strong>：对于专业开发者而言，平台同样能带来巨大的效率提升。在项目初期，当需要快速验证一个想法或搭建一个原型 (Prototype) 时，使用低代码平台可以在数小时甚至数分钟内完成原本需要数天编码的工作。开发者可以将精力更多地投入到业务逻辑梳理和提示工程优化上，而非底层的工程实现。
+3. <strong>提供更优的可视化与可观测性</strong>：相比于在终端中打印日志，图形化的平台天然提供了对智能体运行轨迹的端到端可视化。你可以清晰地看到数据在每一个节点之间如何流动，哪一个环节耗时最长，哪一个工具调用失败。这种直观的调试体验，是纯代码开发难以比拟的。
+4. <strong>标准化与最佳实践沉淀</strong>：优秀的低代码平台通常会内置许多行业内的最佳实践。例如，它会提供预设的 ReAct 模板、优化的知识库检索引擎、标准化的工具接入规范等。这不仅避免了开发者“踩坑”，也使得团队协作更加顺畅，因为所有人都基于同一套标准和组件进行开发。
+
+简而言之，低代码平台并非要取代代码，而是提供了一种更高层次的抽象。它让我们可以从繁琐的底层实现中解放出来，更专注于智能体“思考”与“行动”的逻辑本身，从而更快、更好地将创意变为现实。
+
+### 5.1.2 低代码平台的选择
+
+当前，智能体与 LLM 应用的低代码平台市场呈现出百花齐放的态势，每个平台都有其独特的定位和优势。选择哪个平台，往往取决于你的核心需求、技术背景以及项目的最终目标。在本章的后续内容中，我们将重点介绍并实操三个各具代表性的平台：Coze、Dify和 n8n。在此之前，我们先对它们进行一个概要性的介绍。
+
+<strong>Coze</strong>
+
+- <strong>核心定位</strong>：由字节跳动推出的 Coze<sup>[1]</sup>，主打零代码/低代码的 Agent 的构建体验，让不具备编程背景的用户也能轻松创造。
+- <strong>特点分析</strong>：Coze 拥有极其友好的可视化界面，用户可以像搭建乐高积木一样，通过拖拽插件、配置知识库和设定工作流来创建智能体。其内置了极为丰富的插件库，并支持一键发布到抖音、飞书、微信公众号等多个主流平台，极大地简化了分发流程。
+- <strong>适用人群</strong>：AI 应用的入门用户、产品经理、运营人员，以及希望快速将创意变为可交互产品的个人创作者。
+
+<strong>Dify</strong>
+
+- <strong>核心定位</strong>：Dify 是一个开源的、功能全面的 LLM 应用开发与运营平台<sup>[2]</sup>，旨在为开发者提供从原型构建到生产部署的一站式解决方案。
+- <strong>特点分析</strong>：它融合了后端服务和模型运营的理念，支持 Agent 工作流、RAG Pipeline、数据标注与微调等多种能力。对于追求专业、稳定、可扩展的企业级应用而言，Dify 提供了坚实的基础。
+- <strong>适用人群</strong>：有一定技术背景的开发者、需要构建可扩展的企业级 AI 应用的团队。
+
+<strong>n8n</strong>
+
+- <strong>核心定位</strong>：n8n 本质上是一个开源工作流自动化工具<sup>[3]</sup>，而非纯粹的 LLM 平台。近年来，它积极集成了 AI 能力。
+
+- <strong>特点分析</strong>：n8n 的强项在于“连接”。它拥有数百个预置的节点，可以轻松地将各类 SaaS 服务、数据库、API 连接成复杂的自动化业务流程。你可以在这个流程中嵌入 LLM 节点，使其成为整个自动化链路中的一环。虽然在 LLM 功能的专一度上不如前两者，但其通用自动化能力是独一无二的。不过，其学习曲线也相对陡峭。
+
+- <strong>适用人群</strong>：需要将 AI 能力深度整合进现有业务流程、实现高度定制化自动化的开发者和企业。
+
+在接下来的小节中，我们将逐一上手体验这些平台，通过实际操作来更直观地感受它们各自的魅力。
+
+## 5.2 平台一：Coze
+扣子（Coze）是一个超级酷的AI智能体制作工具！也是目前市面上应用最广泛的智能体平台。该平台以其直观的可视化界面和丰富的功能模块，让用户能够轻松创建各种类型的智能体应用，比如能陪你聊天的机器人、自动写故事的创作机，甚至直接帮你将故事变成电影MV！它的一大亮点在于其强大的生态集成能力。开发完成的智能体可以一键发布到微信、飞书、豆包等主流平台，实现跨平台的无缝部署。对于企业用户而言，Coze还提供了灵活的API接口，支持将智能体能力集成到现有的业务系统中，实现了"搭积木式"的AI应用构建。
+### 5.2.1 Coze 的功能模块
+（1）平台界面初览
+
+整体布局介绍：最近扣子又又更新了他的UI界面了，如图5.1所示。现在最左边的侧边栏是扣子平台主页的开发工作区，包括核心的项目开发、资源库、效果评测和空间配置。下面的区域是扣子开发的配套资料空间包括官方模板一键复制、扣子最大的优势丰富多样的插件商店、最大的智能体社区琳琅满目、api管理就是api测试用的、以及详细的教程文档和面向企业的通用管理。右边这一块有四个模板，最上面是扣子最新的更新公告告诉你扣子的最新进展方便你了解最新的工具和功能。接着下面是新手教程，点开就是新手教程文档啦，分分钟开始智能体搭建。其次是你的关注和智能体推荐，在这里你也可以关注喜欢的AI开发者，和收藏他们的智能体为自己所用。
+
+<div align="center">
+  <img src="https://raw.githubusercontent.com/datawhalechina/Hello-Agents/main/docs/images/5-figures/coze-01.png" alt="图片描述" width="90%"/>
+  <p>图 5.1 扣子智能智能体平台整体示意图</p>
+</div>
+
+（2）核心功能介绍
+
+首先我们点击左边侧栏的加号就可以看到创建智能体的入口了，这里目前有两类AI应用，一种是创建智能体，另一种叫应用。其中智能体又分为单智能体自主规划模式、单智能体对话流模式和多智能体模式。AI应用也分两种不仅能设计桌面网页端的用户界面，还能轻松搭建小程序和 H5 端的界面，如图5.2所示。
+<div align="center">
+  <img src="https://raw.githubusercontent.com/datawhalechina/Hello-Agents/main/docs/images/5-figures/coze-02.png" alt="图片描述" width="90%"/>
+  <p>图 5.2 扣子智能体创建入口</p>
+</div>
+项目空间里是你的智能体仓库，这里放着你所有开发的智能体或复制的智能体/应用，也是在扣子进行智能体开发你最经常来到的地方，如图5.3所示。
+<div align="center">
+  <img src="https://raw.githubusercontent.com/datawhalechina/Hello-Agents/main/docs/images/5-figures/coze-03.png" alt="图片描述" width="90%"/>
+  <p>图 5.3 扣子智能体项目空间</p>
+</div>
+资源库是你开发扣子智能体的核心武器库，资源库就会存放你的工作流，知识库，卡片，提示词库等等一系列开发智能体的工具。你能做出什么样的智能体，首先取决于模型的能力，但是最重要的还是要看你怎么给智能体搭配“出装和技能”。模型决定了智能体的下限，但是扣子资源库给了你智能体的能力的无穷上限，让你能够按照自己的想法，开发想象力和脑洞进行智能体的开发，如图5.4所示。
+<div align="center">
+  <img src="https://raw.githubusercontent.com/datawhalechina/Hello-Agents/main/docs/images/5-figures/coze-04.png" alt="图片描述" width="90%"/>
+  <p>图 5.4 扣子智能体资源库</p>
+</div>
+空间配置包含智能体、插件、工作流和发布渠道的一个统一的管理频道，以及模型管理就是你可以在这里看到你调用的各种大模型，如图5.5所示。
+<div align="center">
+  <img src="https://raw.githubusercontent.com/datawhalechina/Hello-Agents/main/docs/images/5-figures/coze-05.png" alt="图片描述" width="90%"/>
+  <p>图 5.5 扣子智能体发布渠道</p>
+</div>
+如果让我对扣子的智能体开发做一个简单的总结的话，我会把他比喻成一个游戏的各个组成部分，各部分配合组合出一个一个精彩的智能体像极了打“游戏”，每做完一个智能体都像是打完了一个boss并且收获满满，不管是“经验”还是“装备”。
+
+- 工作流： 关卡通关路线图
+- 对话流：NPC 对话通关
+- 插件：角色技能卡
+- 知识库：游戏百科全书
+- 卡片：快捷道具栏
+- 提示词：角色的移动键
+- 数据库：“云存档”
+- 发布管理：关卡审核员
+- 模型管理：游戏角色库或者叫捏脸系统
+- 效果评测：闯关评分系统
+
+
+
+
+### 5.2.2 构建“每日AI简报”助手
+
+<strong>案例说明:</strong> 本实践案例旨在深入剖析 Coze 平台的插件集成能力，指导读者从零开始构建一个功能强大的“每日AI简报”智能体。该智能体能够自动化地从多个信息源（包括36氪、虎嗅、it之家、infoq、GitHub、arXiv）抓取当日最新的AI领域头条新闻、学术论文及开源项目动态，并将其结构化、专业化地整合成一份生动、精炼的简报。
+
+通过本案例，您将系统性地掌握以下核心技能：
+
+  * <strong>多源信息聚合:</strong> 利用 Coze 的插件生态，实现跨平台、跨类型的数据流无缝集成。
+  * <strong>智能体行为定义:</strong> 通过角色设定和提示词（Prompt）工程，精准控制智能体的任务执行与内容生成，确保输出符合预设的专业标准。
+  * <strong>自动化工作流构建:</strong> 学习如何将数据获取、内容处理与格式化输出等多个步骤串联成一个高效、自动化的工作流。
+
+
+
+<strong>步骤一：添加并配置信息源插件</strong>
+
+构建“每日AI简报”智能体的首要任务是为其接入丰富且权威的信息来源。在 Coze 平台中，这通过添加和配置相应的插件来实现。
+
+1.  <strong>插件集成:</strong> 在 Coze 的插件库中，搜索并添加所需的插件。例如，通过 <strong>RSS</strong> 插件订阅媒体平台的RSS源（如图5.6所示），通过 <strong>GitHub</strong> 插件追踪开源项目（如图5.7所示），以及通过 <strong>arXiv</strong> 插件获取最新的学术研究成果（如图5.8所示）。
+
+<div align="center">
+  <img src="https://raw.githubusercontent.com/datawhalechina/Hello-Agents/main/docs/images/5-figures/coze-06.png" alt="图片描述" width="90%"/>
+  <p>图 5.6 媒体平台的RSS源插件</p>
+</div>
+<div align="center">
+  <img src="https://raw.githubusercontent.com/datawhalechina/Hello-Agents/main/docs/images/5-figures/coze-07.png" alt="图片描述" width="90%"/>
+  <p>图 5.7 GitHub插件</p>
+</div>
+<div align="center">
+  <img src="https://raw.githubusercontent.com/datawhalechina/Hello-Agents/main/docs/images/5-figures/coze-08.png" alt="图片描述" width="90%"/>
+  <p>图 5.8 Arxiv插件</p>
+</div>
+
+2.  <strong>个性化配置:</strong> 对每一个插件进行精细化配置，以确保其能精准地获取所需数据。例如，在 RSS 插件中，输入36氪、虎嗅等网站的特定RSS订阅链接；在 GitHub 插件中，设置需监控的关键词查询数量以及最新更新设置；在 arXiv 插件中，定义感兴趣的领域关键词，如“LLM”、“AI”等，定义数量以及最新更新设置。
+
+```
+RSS链接配置
+
+- **36氪：** https://www.36kr.com/feed
+- **虎嗅：** https://rss.huxiu.com/
+- **it之家：** http://www.ithome.com/rss/
+- **infoq：** https://feed.infoq.com/ai-ml-data-eng/
+
+GitHub插件配置
+
+- q:AI
+- per_page:10
+- sort:updated
+
+Arxiv插件配置
+
+- count：5
+- search_query：AI
+- sort_by：2
+```
+
+3.  <strong>编排连接:</strong> 在智能体的可视化编排界面中，将这些已配置的信息源插件（例如 `rss_24Hbj`、`searchRepository`、`arxiv` 等）作为数据输入节点，并将其连接至后续的逻辑处理模块（例如<strong>大模型</strong>模块），以构建完整的数据处理路径，如图5.9所示。
+<div align="center">
+  <img src="https://raw.githubusercontent.com/datawhalechina/Hello-Agents/main/docs/images/5-figures/coze-09.png" alt="图片描述" width="90%"/>
+  <p>图 5.9 每日AI简报编排流程图</p>
+</div>
+
+
+<strong>步骤二：设定智能体角色与提示词</strong>
+
+角色设定与提示词编写是定义智能体行为与输出质量的核心环节。该步骤旨在将抽象的指令转化为智能体可理解并执行的具体任务。
+
+（1）角色设定
+
+我们将智能体设定为一位<strong>资深且权威的科技媒体编辑</strong>。这一角色赋予了智能体明确的专业定位，使其在后续的内容创作中，能够模仿专业编辑的思维模式，进行高效的信息筛选、整合与概括。
+
+（2）提示词编写与结构化
+
+提示词是智能体执行任务的指导手册。我们将其分为<strong>系统提示（System Prompt）和用户提示（User Prompt）</strong>，以确保指令的清晰、完整与可控。
+
+<strong>系统提示（System Prompt）</strong>
+
+系统提示用于定义智能体的长期行为准则和输出格式规范。
+
+```
+# 角色
+你是一位资深且权威的科技媒体编辑,擅长高效精准地整合并创作极具专业性的科技简报,特别在AI领域的技术动态、前沿学术研究成果及热门开源项目方面拥有深入的分析与整合能力。
+
+## 工作流
+### 日报输出格式
+1. 日报开头显著标注“AI日报”、“by@jasonhuang“和当天日期，例如：“AI日报 | 2025年9月24日 | by@jasonhuang”。
+2. <!!!important!!!> 根据每则AI技术新闻、每篇AI学术论文、每个AI开源项目的不同内容，在其标题开头添加一个独有的Emoji表情符号。
+3. 输出的所有内容必须与AI、LLM、AIGC、大模型等技术主题高度相关，坚决排除任何无关信息、广告及营销类内容。
+4. 必须为每一条目（包括AI技术新闻、AI学术论文、AI开源项目）提供其对应的原始链接。
+5. 对输出的每一条新闻或项目，都进行一个简短、精准的概况描述。
+```
+
+<strong>用户提示（User Prompt）</strong>
+
+用户提示用于定义具体的任务指令和数据来源。
+
+```
+- **信息提取与整合：** 从输入源 `{{articles}}`、`{{articles1}}`、`{{articles2}}` 和 `{{articles3}}` 中，筛选并提取关于AI、大模型、AIGC、LLM等相关主题的文章标题及其对应链接，整理为**“AI技术新闻”**模块。
+- **学术论文摘要：** 从输入源 `{{arxiv}}` 中，根据字段 `arxiv_title` 和 `arxiv_link`，总结并整理最新的论文内容，形成**“AI学术论文”**模块。
+- **开源项目筛选：** 从输入源 `{{GitHub}}` 中，筛选出最受瞩目且具影响力的**5个AI开源项目**。提取这些项目的标题和对应链接，整理为**“AI开源项目”**模块。
+
+# 注意事项（Attention）
+- 严格遵循系统提示中定义的日报输出格式。
+- 输出内容总量应为：**10条AI技术新闻、5篇AI学术论文、5个AI开源项目**。
+```
+
+
+
+<strong>步骤三：测试、调试与多渠道发布</strong>
+
+完成智能体的核心逻辑构建后，必须进行严格的测试与调试，以确保其输出符合预期。
+
+<strong>运行预览:</strong> 在 Coze 平台的预览界面运行智能体，观察其生成的简报内容。
+
+```
+# AI日报 by@jasonhuang 2025-09-24
+
+## 🚀 AI技术新闻
+
+🤖 **智元机器人GO-1通用具身基座大模型全面开源**
+链接：https://36kr.com/p/3479085489708163?f=rss
+概况：智元机器人宣布其GO-1通用具身基座大模型全面开源，为机器人领域提供强大的AI基础能力。
+
+🔬 **微软攻克数据中心芯片散热瓶颈：微流体 + AI 精准降温**
+链接：https://www.ithome.com/0/885/391.htm
+概况：微软通过微流体技术与AI算法结合，实现数据中心芯片的精准温度控制，提升能效比。
+......
+
+## 📚 AI学术论文
+
+🧪 **Lyra: Generative 3D Scene Reconstruction via Video Diffusion Model Self-Distillation**
+链接：http://arxiv.org/pdf/2509.19296v1
+概况：提出通过视频扩散模型自蒸馏实现3D场景生成的创新框架，无需多视角训练数据。
+
+📊 **The ICML 2023 Ranking Experiment: Examining Author Self-Assessment in ML/AI Peer Review**
+链接：http://arxiv.org/pdf/2408.13430v3
+概况：研究机器学习会议评审过程中作者自我评估的有效性，提出改进评审机制的方法。
+......
+
+## 💻 AI开源项目
+
+🤖 **llmling-agent - 多智能体工作流框架**
+链接：https://github.com/phil65/llmling-agent
+概况：支持YAML配置和编程方式的多智能体交互框架，集成MCP和ACP协议支持。
+
+🚌 **College_EV_AI_Transportation - 校园AI电动交通系统**
+链接：https://github.com/LuisMc2005v/College_EV_AI_Transportation
+概况：AI驱动的校园电动交通优化系统，实现实时跟踪和高效拼车服务。
+......
+```
+
+仔细检查简报的内容准确性、格式完整性以及语言风格。如果发现不符合预期的部分，需返回提示词或插件配置环节进行细致调整。例如，若内容不够精炼，可修改提示词中的概括要求；若数据获取不准确，则需检查插件配置参数。
+
+多渠道发布: Coze 提供了将智能体一键发布到多个主流应用平台（如微信、豆包、飞书等）的能力，极大地扩展了智能体的应用场景，如图5.10所示。
+
+<div align="center">
+  <img src="https://raw.githubusercontent.com/datawhalechina/Hello-Agents/main/docs/images/5-figures/coze-10.png" alt="图片描述" width="60%"/>
+  <p>图 5.10 扣子平台的多元发布渠道</p>
+</div>
+
+智能体发布后，可以在扣子商店中看到我们创建的AI智能体，同时也可以将其集成到AI应用中为用户提供服务，如图5.11和图5.12所示。在这里也附上[每日AI新闻智能体体验链接](https://www.coze.cn/store/agent/7506052197071962153?bot_id=true&bid=6hkt3je8o2g16)
+
+<div align="center">
+  <img src="https://raw.githubusercontent.com/datawhalechina/Hello-Agents/main/docs/images/5-figures/coze-11.png" alt="图片描述" width="90%"/>
+  <p>图 5.11 AI智能体-每日AI新闻</p>
+</div>
+
+更进一步的，我们可以点击这个[体验链接](https://www.coze.cn/store/project/7458678213078777893?from=store_search_suggestion&bid=6gu3cmr7k5g1i)查看在AI应用中的每日AI新闻。
+<div align="center">
+  <img src="https://raw.githubusercontent.com/datawhalechina/Hello-Agents/main/docs/images/5-figures/coze-12.png" alt="图片描述" width="90%"/>
+  <p>图 5.12 AI应用中的每日AI新闻</p>
+</div>
+<strong>发布配置：</strong>如果想要发布自己的智能体，还需在发布前，为智能体配置恰当的名称、头像及欢迎语，以提供更友好的用户体验，如图5.13和图5.14所示。
+
+<div align="center">
+  <img src="https://raw.githubusercontent.com/datawhalechina/Hello-Agents/main/docs/images/5-figures/coze-13.png" alt="图片描述" width="50%"/>
+  <p>图 5.13 为智能体配置基础信息</p>
+</div>
+<div align="center">
+  <img src="https://raw.githubusercontent.com/datawhalechina/Hello-Agents/main/docs/images/5-figures/coze-14.png" alt="图片描述" width="50%"/>
+  <p>图 5.14 为智能体配置开场白和预设问题</p>
+</div>
+
+
+### 5.2.3 Coze 的优势与局限性分析
+
+<strong>优势:</strong>
+
+  * <strong>强大的插件生态系统:</strong> Coze 平台的核心优势在于其丰富的插件库，这使得智能体能够轻松接入外部服务与数据源，从而实现功能的高度扩展性。
+  * <strong>直观的可视化编排:</strong> 平台提供了一个低门槛的可视化工作流编排界面，用户无需深厚的编程知识，即可通过“拖拽”方式构建复杂的工作流，大大降低了开发难度。
+  * <strong>灵活的提示词控制:</strong> 通过精确的角色设定与提示词编写，用户可以对智能体的行为和内容生成进行细粒度的控制，实现高度定制化的输出。而且还支持提示词管理和模板，极大的方便开发者进行智能体的开发。
+  * <strong>便捷的多平台部署:</strong> 支持将同一智能体发布到不同的应用平台，实现了跨平台的无缝集成与应用。而且扣子还在不断的整合新平台加入他的生态圈，越来越多的手机厂商和硬件厂商都在陆续支持扣子智能体的发布。
+
+<strong>局限性:</strong>
+
+  * <strong>不支持MCP:</strong> 我觉得这是最致命的，尽管扣子的插件市场极其丰富，也极其有吸引力。但是不支持mcp可能会成为限制其发展的枷锁，如果放开那将是又一杀手锏。
+  * <strong>部分插件配置的复杂度高:</strong> 对于需要 API Key 或其他高级参数的插件，用户可能需要具备一定的技术背景才能完成正确的配置。复杂的工作流编排也不仅仅是零基础就可以掌握的，需要一定的js或者python的基础。
+  * <strong>无法导入编排json文件:</strong> 之前扣子是没有导出导入功能的，但是现在付费版是可以导出导入的，但是导出导入的不是像dify,n8n一样的json文件，而是一个zip。也就是说你只能在扣子导出然后扣子导入这个zip。不过你取巧的话也可以选择复制编排，在编排界面ctrl+a选中全部ctrl+c复制编排，然后到另一个空白的工作流或者其他工作流粘贴编排。
+
+
+## 5.3 平台二：Dify
+### 5.3.1 Dify 的介绍与生态
+
+Dify 是一个开源的大语言模型（LLM）应用开发平台，融合了后端即服务（BaaS） 和 LLMOps 理念，为从原型设计到生产部署提供全流程支持，如图5.15所示。它采用分层模块化架构，分为数据层、开发层、编排层和基础层，各层解耦便于扩展。
+
+Dify 对模型高度中立且兼容性强：无论开源或商业模型，用户都可通过简单配置将其接入，并通过统一接口调用其推理能力。其内置支持对数百种开源或专有 LLM 的集成，涵盖 GPT、Deepseek、Llama等模型，以及任何兼容 OpenAI API 的模型。
+
+同时，Dify 支持本地部署（官方提供 Docker Compose 一键启动）和云端部署。用户可以选择将 Dify 自建部署在本地/私有环境（保障数据隐私），也可以使用官方 SaaS 云服务（下述商业模式部分详述）。这种部署灵活性使其适用于对安全性有要求的企业内网环境或对运维便利性有要求的开发者群体。
+
+<div align="center">
+  <img src="https://raw.githubusercontent.com/datawhalechina/Hello-Agents/main/docs/images/5-figures/dify-01.png" alt="图片描述" width="90%"/>
+  <p>图 5.15 Dify官网</p>
+</div>
+
+Marketplace 插件生态：​Dify Marketplace 提供了一站式插件管理和一键部署功能，使开发者能够发现、扩展或提交插件，为社区带来更多可能​，如图5.16所示。
+
+<div align="center">
+  <img src="https://raw.githubusercontent.com/datawhalechina/Hello-Agents/main/docs/images/5-figures/dify-02.png" alt="图片描述" width="90%"/>
+  <p>图 5.16 Dify Marketplace插件生态</p>
+</div>
+Marketplace 包含：
+
+
+- 模型 (Models)​
+- 工具 (Tools)​
+- 智能体策略 (Agent Strategies)​
+- 扩展 (Extensions)​
+- 捆绑包 (Bundles)​
+
+目前，Dify Marketplace 已拥有超过 8677 个插件，涵盖各种功能和应用场景​。其中，官方推荐的插件包括：​
+- Google Search: langgenius/google​
+- Azure OpenAI: langgenius/azure_openai​
+- Notion: langgenius/notion​
+- DuckDuckGo: langgenius/duckduckgo​
+  ​
+
+Dify 为插件开发者提供了强大的开发支持，包括远程调试功能，可与流行的 IDE 无缝协作，只需最少的环境设置​。开发者可以连接到 Dify 的 SaaS 服务，同时将所有插件操作转发到本地环境进行测试，这种开发者友好的方法旨在赋能插件创建者并加速 Dify 生态系统的创新。​这也为什么Dify可以成目前最成功的智能体平台之一，因为模型是都可以接入的，提示词、编排是可以复制的，但是工具插件的有无，是否丰富就直接决定了你的智能体能否做出更好的效果或者意想不到的强大功能。
+
+### 5.3.2 构建一个超级智能体个人助手
+> **✨✨ 详细操作指南**：请参考 **[Dify智能体创建保姆级操作流程](https://github.com/datawhalechina/hello-agents/blob/main/Extra-Chapter/Extra03-Dify智能体创建保姆级操作流程.md)**
+
+
+在上一节 Coze 的案例中，我们搭建了一个每日AI简报智能体。虽然功能明确，但其单一的简报生成能力略显局限。本节将使用 Dify 构建一个功能全面的超级智能体个人助手，涵盖日常问答、文案优化、多模态生成、数据分析等多个场景。在开始之前，我们先简要了解 Dify 的主要界面和功能模块。
+
+<div align="center">
+  <img src="https://raw.githubusercontent.com/datawhalechina/Hello-Agents/main/docs/images/5-figures/dify-14.png" alt="图片描述" width="90%"/>
+  <p>图 5.17 Dify 智能体搭建主页</p>
+</div>
+<div align="center">
+  <img src="https://raw.githubusercontent.com/datawhalechina/Hello-Agents/main/docs/images/5-figures/dify-18.png" alt="图片描述" width="90%"/>
+  <p>图 5.18 Dify 官方模板库</p>
+</div>
+<div align="center">
+  <img src="https://raw.githubusercontent.com/datawhalechina/Hello-Agents/main/docs/images/5-figures/dify-15.png" alt="图片描述" width="90%"/>
+  <p>图 5.19 Dify 知识库</p>
+</div>
+<div align="center">
+  <img src="https://raw.githubusercontent.com/datawhalechina/Hello-Agents/main/docs/images/5-figures/dify-16.png" alt="图片描述" width="90%"/>
+  <p>图 5.20 Dify 插件市场</p>
+</div>
+<div align="center">
+  <img src="https://raw.githubusercontent.com/datawhalechina/Hello-Agents/main/docs/images/5-figures/dify-17.png" alt="图片描述" width="90%"/>
+  <p>图 5.21 Dify 大模型配置</p>
+</div>
+
+<strong>(1) 创建插件和配置MCP</strong>
+
+在构建智能体之前，需要先完成必要的插件安装和 MCP 配置。如图5.22所示，这些是本案例所需的核心插件。
+
+<div align="center">
+  <img src="https://raw.githubusercontent.com/datawhalechina/Hello-Agents/main/docs/images/5-figures/dify-19.png" alt="图片描述" width="90%"/>
+  <p>图 5.22 Dify 插件安装配置</p>
+</div>
+
+图中红框标注的插件需要从 Dify 插件市场中搜索并安装。用户可以点击查看详情了解各插件的具体功能。
+
+接下来配置 MCP（Model Context Protocol）。关于 MCP 的详细原理这里不展开，我们重点演示如何使用云端部署的 MCP 服务。本案例使用国内的魔搭社区 MCP 市场进行演示，如图5.23所示。
+
+<div align="center">
+  <img src="https://raw.githubusercontent.com/datawhalechina/Hello-Agents/main/docs/images/5-figures/dify-20.png" alt="图片描述" width="90%"/>
+  <p>图 5.23 魔搭社区mcp市场</p>
+</div>
+
+打开魔搭社区 MCP 市场，选择 hosted 类型。以高德 MCP 为例，进入其主页后，在右侧选择 SSE 模式并点击连接配置，即可生成专属的 MCP 配置 JSON，如图5.24所示。MCP 支持多种通信模式，但在 Dify 中使用 SSE 模式通信更加流畅稳定，因此推荐选择 SSE 模式。
+
+<div align="center">
+  <img src="https://raw.githubusercontent.com/datawhalechina/Hello-Agents/main/docs/images/5-figures/dify-21.png" alt="图片描述" width="90%"/>
+  <p>图 5.24 高德mcp配置示例</p>
+</div>
+
+<strong>(2) Agent设计与效果展示</strong>
+
+本案例将创建一个全方位的私人助手，涵盖以下功能模块：
+
+- 日常生活问答
+- 文案润色优化
+- 多模态内容生成（图片、视频）
+- 数据查询与可视化分析
+- MCP 工具集成（高德地图、饮食推荐、新闻资讯）
+
+整个智能体的编排架构如图5.25所示。
+
+<div align="center">
+  <img src="https://raw.githubusercontent.com/datawhalechina/Hello-Agents/main/docs/images/5-figures/dify-12.png" alt="图片描述" width="60%"/>
+  <p>图 5.25 智能体编排</p>
+</div>
+
+针对多智能体架构，我们使用问题分类器进行智能路由。在分类器中为每个智能体定义核心功能和任务范围，确保用户请求能够准确分发到对应的处理模块。
+
+<strong>日常助手模块</strong>
+
+这是一个基础的对话模块，配置大语言模型和时间工具，作为兜底的通用问答服务。
+
+提示词配置：
+```
+# Role: 日常问题咨询专家
+
+## Profile
+- language: 中文
+- description: 专门回答用户日常生活中的一般性问题，提供实用、准确、易懂的建议和解答
+- background: 拥有丰富的生活经验和广泛的知识储备，擅长将复杂问题简单化
+- personality: 亲切友好、耐心细致、务实可靠
+- expertise: 日常生活、健康养生、家庭管理、人际关系、实用技巧
+
+
+## Skills
+
+1. 问题分析能力
+   - 快速理解: 迅速把握用户问题的核心要点
+   - 分类识别: 准确判断问题所属的生活领域
+   - 需求挖掘: 深入理解用户潜在需求
+   - 优先级排序: 合理评估问题的重要性和紧急性
+
+2. 解答提供能力
+   - 知识整合: 综合运用多领域知识提供解答
+   - 方案制定: 提供具体可行的解决方案
+   - 步骤分解: 将复杂问题拆解为简单步骤
+   - 替代方案: 准备多种备选方案供用户选择
+
+3. 沟通表达能力
+   - 语言通俗: 使用简单易懂的日常用语
+   - 逻辑清晰: 条理分明地组织回答内容
+   - 举例说明: 通过具体案例帮助理解
+   - 重点突出: 强调关键信息和注意事项
+
+## Rules
+
+1. 回答原则：
+   - 实用性优先: 确保提供的建议具有可操作性
+   - 准确性保证: 基于可靠信息和常识给出回答
+   - 中立客观: 避免个人偏见和主观臆断
+   - 适度建议: 根据问题复杂程度提供适当深度的解答
+
+2. 行为准则：
+   - 及时响应: 快速回应用户的问题
+   - 耐心细致: 对重复或简单问题保持耐心
+   - 积极引导: 鼓励用户提供更多背景信息
+   - 持续改进: 根据反馈优化回答质量
+
+
+## Workflows
+
+- 目标: 为用户提供实用、可靠的日常问题解决方案
+- 步骤 1: 仔细阅读并理解用户提出的日常问题
+- 步骤 2: 分析问题类型和用户潜在需求
+- 步骤 3: 基于常识和经验提供具体可行的建议
+- 步骤 4: 用通俗易懂的语言组织回答内容
+- 步骤 5: 检查回答的实用性和安全性
+
+
+## Initialization
+作为日常问题咨询专家，你必须遵守上述Rules，按照Workflows执行任务。
+```
+
+效果演示如图5.26所示：
+
+<div align="center">
+  <img src="https://raw.githubusercontent.com/datawhalechina/Hello-Agents/main/docs/images/5-figures/dify-03.png" alt="图片描述" width="50%"/>
+  <p>图 5.26 日常助手</p>
+</div>
+
+<strong>文案优化模块</strong>
+
+根据 OpenAI 的数据报告，超过60%的用户使用 ChatGPT 进行文本优化相关任务，包括润色、修改、扩写、缩写等。因此，文案优化是高频需求场景，我们将其作为第二个核心功能模块。
+
+提示词配置：
+```
+# 一、 角色人设（Role）
+你是一位专业的文案优化专家，拥有丰富的营销文案写作和优化经验，擅长提升文案的吸引力、转化率和可读性。你的视角是站在目标受众和营销目标的角度，专业度边界限于文案优化领域，不涉及技术实现或产品开发。
+
+# 二、 背景（Background）
+用户提供了一段原始文案，需要你对其进行优化，以提升其整体效果。背景信息包括：文案可能用于营销、品牌推广或信息传达等场景，但具体用途未详细说明。已知条件是用户希望文案更吸引人、清晰或具有说服力，但未提供原始文案内容，因此你需要基于通用优化原则工作。
+
+# 三、 任务目标（Task）
+- 分析并优化文案的结构、语言和风格，使其更符合目标受众的偏好。
+- 提升文案的吸引力、可读性和转化潜力，确保信息传达清晰。
+- 根据常见优化原则（如简洁性、情感共鸣、行动号召等）进行调整，不涉及内容重写，除非必要。
+- 在保持核心信息的前提下，适当扩展和丰富文案内容，提供更全面的优化版本。
+
+# 四、 限制提示（Limit）
+- 避免改变原始文案的核心信息或意图，除非用户明确要求。
+- 不要添加虚构或无关内容，确保优化基于逻辑和最佳实践。
+- 避免使用过于技术性或专业术语，除非目标受众是专业人士。
+- 不涉及对图片、布局或其他非文本元素的优化。
+
+# 五、 输出格式要求（Example）
+输出应为优化后的文案文本，结构清晰，语言流畅，内容详实。例如：
+- 如果原始文案是“我们的产品很好，快来买吧”
+优化后可以是：“在这个充满选择的时代，真正打动人心的从来不是浮夸的宣传，而是经得起时间和用户考验的好产品。我们的产品正是如此。它不仅在设计上注重细节与品质，更在功能上不断打磨与创新，只为给每一位用户带来更好的使用体验。无论是外观的质感，还是性能的稳定，我们始终坚持高标准严要求，力求让每一位选择我们的顾客都能感受到物超所值的惊喜。
+我们深知，购买一款产品，不仅仅是一次简单的消费，更是一种对生活方式的选择。因此，我们从选材、工艺到售后服务的每一个环节，都倾注了满满的诚意与专业，用心守护您的每一次体验。无论您是追求实用、注重品质，还是想要与众不同的个性化，我们的产品都能为您提供理想的解决方案。
+现在，就让我们用行动来证明一切。真正的好产品，不需要过多修饰，它本身就是最好的代言人。立即行动，选择我们，让品质改变生活，从此拥有与众不同的体验！”
+- 输出应直接呈现优化内容，无需额外解释或注释，除非用户要求。请确保优化后的文案内容更加丰富和完整，优化后的文案文本须超过500字。
+```
+
+效果演示如图5.27所示：
+
+<div align="center">
+  <img src="https://raw.githubusercontent.com/datawhalechina/Hello-Agents/main/docs/images/5-figures/dify-04.png" alt="图片描述" width="50%"/>
+  <p>图 5.27 文案助手</p>
+</div>
+
+<strong>多模态生成模块</strong>
+
+图片和视频生成是另一个高频应用场景。随着豆包生图、Google Imagen 等模型的进化，以及可灵、Google Veo 3、OpenAI Sora 2 等视频生成技术的突破，多模态内容生成的质量已达到实用水平。
+
+本案例使用豆包插件实现图片和视频生成。配置步骤如下：
+
+1. 在工作流中添加豆包生图/生视频插件
+2. 配置参数（如图片比例1:1，模型选择 doubao seedream）
+3. 将生成的 file 文件输出
+
+生图配置和效果如图5.28和图5.29所示。
+
+<div align="center">
+  <img src="https://raw.githubusercontent.com/datawhalechina/Hello-Agents/main/docs/images/5-figures/dify-13.png" alt="图片描述" width="50%"/>
+  <p>图 5.28 生图设置</p>
+</div>
+<div align="center">
+  <img src="https://raw.githubusercontent.com/datawhalechina/Hello-Agents/main/docs/images/5-figures/dify-05.png" alt="图片描述" width="50%"/>
+  <p>图 5.29 生图助手</p>
+</div>
+
+视频生成的效果如图5.30所示。
+
+<div align="center">
+  <img src="https://raw.githubusercontent.com/datawhalechina/Hello-Agents/main/docs/images/5-figures/dify-06.png" alt="图片描述" width="50%"/>
+  <p>图 5.30 视频助手</p>
+</div>
+
+<strong>数据查询与分析模块</strong>
+
+数据处理是智能体的重要能力之一。本模块演示如何在 Dify 中连接数据库，实现数据查询和可视化分析。
+
+首先安装数据查询工具插件，本案例使用 `rookie-text2data` 插件。数据查询的关键在于为大模型提供清晰的表结构和字段信息，使其能够生成准确的 SQL 查询语句。常见做法包括：
+
+- 直接提供数据表的 DDL 语句
+- 提供表名和字段名的对应关系说明
+
+配置数据库连接信息（IP地址、数据库名称、端口、账号、密码等），如图5.31所示。查询结果需要通过大模型节点进行整理，转换为易于理解的自然语言输出。
+
+<div align="center">
+  <img src="https://raw.githubusercontent.com/datawhalechina/Hello-Agents/main/docs/images/5-figures/dify-22.png" alt="图片描述" width="50%"/>
+  <p>图 5.31 数据库配置</p>
+</div>
+
+提示词设置：
+
+```
+# 一、 角色人设（Role）
+您是一位专业的数据查询师，擅长数据整理，具有清晰的逻辑思维和简洁表达能力。
+
+# 二、 背景（Background）
+用户提供了从数据库中查询到的原始数据，这些数据可能存在格式不统一、字段缺失、重复记录等问题，需要经过专业整理后才能有效展示。
+
+# 三、 任务目标（Task）
+1. 对原始数据进行归纳和整理
+2. 按照正确的逻辑对数据进行分类和排序
+3. 数据展示突出关键信息和数据洞察
+4. 提供易于理解的数据展示
+
+# 四、 限制提示（Limit）
+1. 不得随意删除重要数据
+2. 避免使用过于复杂或专业的统计术语
+3. 不得篡改原始数据的真实值
+4. 避免展示过多冗余信息，保持简洁明了
+5. 不得泄露敏感数据或个人隐私信息
+
+# 五、 输出格式要求（Example）
+ 数据概览：简要说明数据内容即可
+```
+
+效果展示如图5.32所示：
+
+<div align="center">
+  <img src="https://raw.githubusercontent.com/datawhalechina/Hello-Agents/main/docs/images/5-figures/dify-07.png" alt="图片描述" width="50%"/>
+  <p>图 5.32 数据查询助手</p>
+</div>
+
+提示词设置：
+
+```
+# 一、 角色人设（Role）
+你是一位专业的数据分析师，具备数据整理、清洗和可视化能力，能够从原始数据中提取关键信息并转化为直观的可视化展示。
+
+# 二、 背景（Background）
+用户已从数据库中查询到一批原始数据，这些数据可能包含多个字段、存在缺失值或格式不一致的情况，需要经过整理后生成可视化图表。
+
+# 三、 任务目标（Task）
+#工作流程
+1. 数据分析
+按照合理的规则进行数据分析整理总结
+2. 分析 & 可视化
+至少生成 1 幅图表（柱状 / 折线 / 饼图任选其1或以上）
+可调用工具：“generate_pie_chart" | "generate_column_chart" | "generate_line_chart"
+
+# 四、 限制提示（Limit）
+1. 避免使用过于复杂的图表类型，确保可视化结果易于理解
+2. 不要忽略数据质量问题，必须进行必要的数据清洗
+3. 避免在可视化中使用过多颜色或元素，保持简洁明了
+4. 不要遗漏关键数据的标注和说明
+5.必须进行总结和图表生成，不管数据多少
+
+# 五、 输出格式要求（Example）
+请按照以下格式输出：
+1. 数据概况总结（不要输出字段名称，不要分点，一小段话就行）
+2. 展示生成的图表
+```
+
+<div align="center">
+  <img src="https://raw.githubusercontent.com/datawhalechina/Hello-Agents/main/docs/images/5-figures/dify-08.png" alt="图片描述" width="50%"/>
+  <p>图 5.33 数据分析助手</p>
+</div>
+
+数据分析助手这一块唯一的不同就是我们增加了数据可视化的工具，也就是“generate_pie_chart" | "generate_column_chart" | "generate_line_chart"这几个生成bi图表的工具插件，这个在前面相信大家都按照要求安装了就可以直接添加启动使用，并像上面的提示词一样增加对应的描述即可。
+
+<strong>MCP 工具集成</strong>
+
+最后是 MCP 工具的集成应用。在前面我们已经完成了 MCP 的配置，现在将其集成到智能体中。配置步骤如下：
+
+1. 选择支持 MCP 调用的智能体策略
+2. 选择 ReAct 模式
+3. 配置 MCP 服务（注意删除 `mcp-server` 前缀，选择 SSE 模式）
+4. 填写相应的提示词
+
+配置界面如图5.34所示。
+
+<div align="center">
+  <img src="https://raw.githubusercontent.com/datawhalechina/Hello-Agents/main/docs/images/5-figures/dify-23.png" alt="图片描述" width="50%"/>
+  <p>图 5.34 智能体的mcp配置</p>
+</div>
+
+高德助手、饮食助手和新闻助手的效果分别如图5.35、图5.36和图5.37所示。
+
+<div align="center">
+  <img src="https://raw.githubusercontent.com/datawhalechina/Hello-Agents/main/docs/images/5-figures/dify-09.png" alt="图片描述" width="50%"/>
+  <p>图 5.35 高德助手</p>
+</div>
+
+<div align="center">
+  <img src="https://raw.githubusercontent.com/datawhalechina/Hello-Agents/main/docs/images/5-figures/dify-10.png" alt="图片描述" width="50%"/>
+  <p>图 5.36 饮食助手</p>
+</div>
+
+<div align="center">
+  <img src="https://raw.githubusercontent.com/datawhalechina/Hello-Agents/main/docs/images/5-figures/dify-11.png" alt="图片描述" width="50%"/>
+  <p>图 5.37 新闻助手</p>
+</div>
+
+至此，我们完成了一个功能全面的超级智能体个人助手。该助手涵盖了生活的多个方面：需要新衣服时，可以让豆包生成设计；出门前，可以让高德助手规划路线；不知道吃什么时，可以获取饮食推荐；想了解学习情况时，可以进行数据分析。这个智能体能够处理各类工作和生活任务，期待看到大家搭建出更多有创意的私人智能体助手。
+
+### 5.3.3 Dify 的优势与局限性分析
+
+Dify 作为一款领先的 AI 应用开发平台，在多个方面展现出显著优势：​
+
+1. 核心优势​
+
+- 全栈式开发体验：Dify 将 RAG 管道、AI 工作流、模型管理等功能整合到一个平台中，提供一站式的开发体验​
+- 低代码与高扩展性的平衡：Dify 在低代码开发的便利性和专业开发的灵活性之间取得了良好平衡​
+​
+- 企业级安全与合规：Dify 提供 AES-256 加密、RBAC 权限控制和审计日志等功能，满足严格的安全和合规要求​
+​
+- 丰富的工具集成能力：Dify 支持 9000 + 工具和 API 扩展，提供了广泛的功能扩展性​
+- 活跃的开源社区：Dify 拥有活跃的开源社区，提供了丰富的学习资源和支持​
+
+
+
+2. 主要局限​
+
+- 学习曲线较陡：对于完全没有技术背景的用户，仍然存在一定的学习曲线​
+​
+- 性能瓶颈：在高并发场景下可能面临性能挑战，需要进行适当的优化​。Dify 系统的核心服务端组件由 Python 语言实现，与 C++、Golang、Rust 等语言相比，性能表现相对较差
+​
+- 多模态支持不足：当前主要以文本处理为主，对图像、视频、HTML等的支持有限​
+​
+- 企业版成本较高：Dify 的企业版定价相对较高，可能超出小型团队的预算​
+​
+- API 兼容性问题：Dify 的 API 格式不兼容 OpenAI，可能限制与某些第三方系统的集成​
+
+
+
+## 5.4 平台三：n8n
+
+正如我们之前所介绍的，n8n 的核心身份是一个通用的工作流自动化平台，而非一个纯粹的 LLM 应用构建工具。理解这一点，是掌握 n8n 的关键。在使用 n8n 构建智能应用时，我们实际上是在设计一个更宏大的自动化流程，而大语言模型只是这个流程中的一个（或多个）强大的“处理节点”。
+
+### 5.4.1 n8n 的节点与工作流
+
+n8n 的世界由两个最基本的概念构成：<strong>节点 (Node)</strong> 和 <strong>工作流 (Workflow)</strong>。
+
+- <strong>节点 (Node)</strong>：节点是工作流中执行具体操作的最小单元。你可以把它想象成一个具有特定功能的“积木块”。n8n 提供了数百种预置节点，涵盖了从发送邮件、读写数据库、调用 API 到处理文件等各种常见操作。每个节点都有输入和输出，并提供图形化的配置界面。节点大致可以分为两类：
+  - <strong>触发节点 (Trigger Node)</strong>：它是整个工作流的起点，负责启动流程。例如，“当收到一封新的 Gmail 邮件时”、“每小时定时触发一次”或“当接收到一个 Webhook 请求时”。一个工作流必须有且仅有一个触发节点。
+  - <strong>常规节点 (Regular Node)</strong>：负责处理具体的数据和逻辑。例如，“读取 Google Sheets 表格”、“调用 OpenAI 模型”或“在数据库中插入一条记录”。
+- <strong>工作流 (Workflow)</strong>：工作流是由多个节点连接而成的自动化流程图。它定义了数据从触发节点开始，如何一步步地在不同节点之间传递、被处理，并最终完成预设任务的完整路径。数据在节点之间以结构化的 JSON 格式进行传递，这使得我们可以精确地控制每一个环节的输入和输出。
+
+
+n8n 的真正威力在于其强大的“连接”能力。它可以将原本孤立的应用程序和服务（如企业内部的 CRM、外部的社交媒体平台、你的数据库以及大语言模型）串联起来，实现过去需要复杂编码才能完成的端到端业务流程自动化。在接下来的实战中，我们将亲手体验如何利用这套节点和工作流系统，构建一个集成了 AI 能力的自动化应用。
+
+### 5.4.2 搭建智能邮件助手
+
+关于n8n的环境配置和最基础的使用，在项目的`Additional-Chapter`文件夹下制作了文档，这里就不过多介绍。在上一节中，我们了解了 n8n 的基本概念。这个案例将清晰地展示现代 AI Agent 与传统自动化工作流的核心区别。传统流程是线性的，而我们即将构建的 Agent 将能够接收用户邮件，通过一个核心的 <strong>AI Agent 节点</strong> 进行“思考”，自主理解用户意图，并在多个可用“工具”中进行决策和选择，最终自动生成并发送高度相关的回复。
+
+整个过程模拟了一个更高级的决策逻辑：`接收 -> AI Agent (思考 -> 决策 -> 工具调用) -> 回复`，如图5.38所示。
+
+<div align="center">
+  <img src="https://raw.githubusercontent.com/datawhalechina/Hello-Agents/main/docs/images/5-figures/n8n-01.png" alt="图片描述" width="90%"/>
+  <p>图 5.38 一体化智能邮件 Agent 架构示意图</p>
+</div>
+
+与将工具拆分为多个子工作流的传统方法不同，n8n 的 `AI Agent` 节点允许我们将组件，例如大语言模型（LLM）、记忆（Memory）、工具（Tools）都整合在一个统一的界面中，极大地简化了构建过程。
+
+整个搭建过程分为两个核心步骤：
+
+1. <strong>准备 Agent 的“记忆”</strong>：创建一个独立的流程，为 Agent 加载私有知识库。
+2. <strong>构建 Agent 主体</strong>：创建接收邮件、思考并回复的主工作流。
+
+### 5.4.3 构建 Agent 的私有知识库
+
+为了让 Agent 能够回答关于特定领域（比如您的个人信息或项目文档）的问题，我们需要先为它准备一个“外部大脑”，一个向量知识库。
+
+在 n8n 中，我们可以使用 `Simple Vector Store` 节点在内存中快速构建一个知识库。这个准备流程通常只需要在更新知识时运行一次。
+
+<strong>(1) 定义知识源</strong>
+
+首先，我们使用 `Code` 节点来存放我们的原始知识文本。这是一个简单快捷的方式，实际项目中数据也可以来自文件、数据库等。
+
+- <strong>节点</strong>：`Code`
+- <strong>内容</strong>：将您的知识以 JSON 格式写入。
+
+<div align="center">
+  <img src="https://raw.githubusercontent.com/datawhalechina/Hello-Agents/main/docs/images/5-figures/n8n-02.png" alt="Code 节点中填写了知识库 JSON 文本的截图" width="90%"/>
+  <p>图 5.39 在 Code 节点中定义知识源</p>
+</div>
+
+```javascript
+return [
+  {
+    "doc_id": "work-schedule-001",
+    "content": "我的工作时间是周一至周五，上午9点到下午5点。时区是澳大利亚东部标准时间（AEST）。"
+  },
+  {
+    "doc_id": "off-hours-policy-001",
+    "content": "在非工作时间（包括周末和公共假期），我无法立即回复邮件。"
+  },
+  {
+    "doc_id": "auto-reply-instruction-001",
+    "content": "如果邮件是在非工作时间收到的，AI助手应该告知发件人，邮件已收到，我会在下一个工作日的9点到5点之间尽快处理并回复。"
+  }
+];
+```
+
+<strong>(2) 文本向量化 (Embeddings)</strong>
+
+计算机无法直接理解文本，需要将其转换为向量。我们使用 `Embeddings` 节点来完成这个“翻译”工作。
+
+- <strong>节点</strong>：`Embeddings Google Gemini`，选择模型为`gemini-embedding-exp-03-07`。这里使用Google API来演示，如果不知道如何获取Google API可以参考5.5.3小节。
+- <strong>配置</strong>：将其连接到 `Code` 节点之后，它会自动将上游传入的文本转换为向量数据。
+
+<div align="center">
+  <img src="https://raw.githubusercontent.com/datawhalechina/Hello-Agents/main/docs/images/5-figures/n8n-03.png" alt="" width="90%"/>
+  <p>图 5.40 对 Code 中数据进行向量化</p>
+</div>
+
+<strong>(3) 存入向量存储</strong>
+
+最后，我们将向量化的知识存入内存数据库中，如图5.41所示。
+
+- <strong>节点</strong>：`Simple Vector Store`
+- <strong>配置</strong>:
+  - <strong>Operation Mode</strong>: `Insert Documents` (写入模式)。
+  - <strong>Memory Key</strong>: 为这个知识库起一个唯一的名字，例如 `my-dailytime`。这个 Key 相当于数据库的“表名”，后续 Agent 将通过它来查找信息。
+
+<div align="center">
+  <img src="https://raw.githubusercontent.com/datawhalechina/Hello-Agents/main/docs/images/5-figures/n8n-04.png" alt="" width="90%"/>
+  <p>图 5.41 对 Code 中数据存入向量存储</p>
+</div>
+
+完成配置后，<strong>手动执行一次</strong>这个流程。成功后，您的私有知识就加载到 n8n 的内存中了，如图5.42所示。
+
+<div align="center">
+  <img src="https://raw.githubusercontent.com/datawhalechina/Hello-Agents/main/docs/images/5-figures/n8n-05.png" alt="" width="90%"/>
+  <p>图 5.42 完整的知识库加载工作流</p>
+</div>
+
+### 5.4.4 创建 Agent 主工作流
+
+有了工具，我们现在开始构建 Agent 的主要流程。它将负责接收邮件、进行思考和决策，并在合适的时机调用我们刚刚创建的工具，最终执行邮件的回复。
+
+（1）配置 Gmail 触发器
+
+新建一个工作流，命名为 `Agent: Customer Support`。使用 `Gmail` 节点作为触发器，将其 <strong>Event</strong> 设置为 `Message Received`，并配置好你的邮箱账号。这样，每当有新邮件进入收件箱时，该工作流就会被自动触发，如图5.43所示。
+
+<div align="center">
+  <img src="https://raw.githubusercontent.com/datawhalechina/Hello-Agents/main/docs/images/5-figures/n8n-06.png" alt="" width="90%"/>
+  <p>图 5.43 新建Gmail节点图</p>
+</div>
+
+配置过程可参考[n8n官方文档](https://docs.n8n.io/integrations/builtin/credentials/google/oauth-single-service/?utm_source=n8n_app&utm_medium=credential_settings&utm_campaign=create_new_credentials_modal#enable-apis)。Gmail的api在这里[配置](https://console.cloud.google.com/apis/library/gmail.googleapis.com?project=apt-entropy-471905-b9)，需要创建凭证，选择Web 应用类型，最后即得到所需的客户端ID和客户端密钥。并且需要在已获授权的重定向 URI 将n8n刚给的OAuth Redirect URL给添加上。同时，还需要在[目标对象](https://console.cloud.google.com/auth/audience?project=apt-entropy-471905-b9)的Add users加上自己的邮箱地址。最终配置完成的页面如图5.44所示。
+
+<div align="center">
+  <img src="https://raw.githubusercontent.com/datawhalechina/Hello-Agents/main/docs/images/5-figures/n8n-07.png" alt="" width="90%"/>
+  <p>图 5.44 Gmail账号加载成功图</p>
+</div>
+
+现在我们可以点击`Fetch Test Event`获取邮件了，如图5.45所示！
+
+<div align="center">
+  <img src="https://raw.githubusercontent.com/datawhalechina/Hello-Agents/main/docs/images/5-figures/n8n-08.png" alt="" width="90%"/>
+  <p>图 5.45 获取实时邮件图</p>
+</div>
+
+（2）配置 AI Agent 节点
+
+这是整个工作流的大脑。从节点菜单中拖出一个 `AI Agent` 节点，并进行如下配置：
+
+- <strong>Chat Model</strong>: 连接您选择的大语言模型，例如 `Google Gemini Chat Model`。这是 Agent 的“思考核心”。
+- <strong>Memory</strong>: 连接一个 `Simple Memory` 节点。这能让 Agent 在处理同一邮件线索下的多封往来邮件时，记住之前的对话历史。
+- <strong>Tools</strong>: 我们可以将多个工具连接到这里。在我们的案例中，我们连接两个工具：
+  1. `SerpAPI`: 这是我们之前第四章案例中使用过的API，让 Agent 拥有上网搜索公开信息的能力。
+  2. `Simple Vector Store`: 让 Agent 拥有查询我们第一部分中创建的私有知识库的能力。
+
+<div align="center">
+  <img src="https://raw.githubusercontent.com/datawhalechina/Hello-Agents/main/docs/images/5-figures/n8n-09.png" alt="" width="90%"/>
+  <p>图 5.46 AI Agent节点设置图</p>
+</div>
+
+这是 Agent “思考”的第一步。添加一个 `Gemini` 节点（或其他 LLM 节点），模式设置为 `Chat`。我们的目标是让它分析邮件内容，判断用户意图。Prompt 的设计至关重要，一个清晰的指令能让 LLM 更准确地完成任务。我们将邮件正文和主题（`{{ $json.snippet }}{{ $json.Subject }}`）作为变量传入 Prompt 中，没有API可以到[Google AI Studio](https://aistudio.google.com/prompts/new_chat)点击Get API key创建一个可用的。
+
+其中，对于AI Agent节点，我们需要填的主要是`User Message`和`System Message`部分，如图5.47所示。
+
+<div align="center">
+  <img src="https://raw.githubusercontent.com/datawhalechina/Hello-Agents/main/docs/images/5-figures/n8n-10.png" alt="" width="90%"/>
+  <p>图 5.47 AI Agent 节点详解图</p>
+</div>
+
+在这里给出我们案例所使用的Prompt：
+
+```json
+# Prompt (User Message)
+# 上下文信息
+- 当前时间: {{ new Date().toLocaleString('en-AU', { timeZone: 'Australia/Sydney', hour12: false }) }} (澳大利亚悉尼时间)
+- 发件人: {{ $json.From }}
+- 主题: {{ $json.Subject }}
+- 邮件正文: {{ $json.snippet }}
+
+# System Message
+# 角色和目标
+你是一个全天候待命、专业高效的AI邮件助手。你的任务是：第一时间使用公开信息尽力回答所有邮件中的问题，并根据我的工作日程，在回复的开头附加上下文状态提醒。
+
+# 上下文信息
+- 当前时间: {{ new Date().toLocaleString('en-AU', { timeZone: 'Australia/Sydney', hour12: false }) }} (澳大利亚悉尼时间)
+- 邮件信息在输入数据中。
+
+# 可用工具
+- Simple Vector Store2: 用来查询我准确的工作时间（例如：周一至周五，上午9点到下午5点）。
+- SerpAPI: **[主要信息来源]** 优先使用此工具在互联网上搜索，以回答邮件中的具体问题。
+
+# 执行步骤
+1.  **分析问题**: 首先，仔细阅读邮件内容，提炼出发件人的核心问题。
+
+2.  **并行信息搜集**: 同时执行以下两个操作来收集信息：
+    a. 使用 `SerpAPI` 工具，上网搜索出发件人问题的答案。
+    b. 使用 `Simple Vector Store2` 工具，获取我设定的准确工作时间。
+
+3.  **草拟核心回复**: 根据 `SerpAPI` 搜集到的信息，清晰、直接地回答发件人的问题，这部分将作为邮件回复的主体。
+
+4.  **添加状态前缀并整合**:
+    a. 对比“当前时间”和我从工具中获取的工作时间。
+    b. **如果当前是“非工作时间”**: 创建一段状态提醒前缀。这段前缀**必须包含**从 `Simple Vector Store2` 获取到的具体工作时间。
+        * **前缀示例**: "您好，感谢您的来信。您已在我的非工作时间联系我（我的工作时间为：[此处插入查询到的工作时间]）。我会在下一个工作日亲自审阅此邮件。与此同时，这是根据公开信息为您找到的初步答复：**<br><br>---<br><br>**"
+    c. **如果当前是“工作时间”**: 只需使用简单的问候语即可。
+        * **前缀示例**: "您好，关于您提出的问题，答复如下：**<br><br>---<br><br>**"
+    d. 将生成的前缀和你草拟的核心回复（第3步的结果）拼接在一起，形成最终的邮件正文。
+
+5.  **格式化输出**: 你必须将最终生成的邮件内容以一个严格的 JSON 格式输出。格式如下，不要添加任何额外的解释或文字：
+    {
+      "shouldReply": true,
+      "subject": "Re: [原始邮件主题]",
+      "body": "[这里是拼接好的、完整的邮件回复正文，**所有换行必须使用HTML的<br>标签**]"
+    }
+
+# 规则和限制
+- **永远优先尝试回答**: 无论何时，你的首要任务是使用 `SerpAPI` 为用户提供有价值的回复。
+- **必须声明状态**: 如果在非工作时间回复，必须在邮件开头明确声明，并附上我准确的工作时间。
+- **信息来源要准确**: 工作时间必须严格以 `Simple Vector Store2` 的结果为准；问题答案主要来源于 `SerpAPI`，不要编造信息。
+- **输出格式**: **在最终输出的JSON中，`body`字段内的所有换行都必须使用 `<br>` 标签，而不是 `\n`。**
+```
+
+(3) 配置 Agent 的工具
+
+对于 `Simple Vector Store` 工具，我们需要进行关键配置，以确保它能正确“读取”我们之前存入的知识：
+
+- <strong>Operation Mode</strong>: `Retrieve Documents (As Tool for AI Agent)` (作为工具的读取模式)。
+- <strong>Memory Key</strong>: 必须填写与第一部分<strong>完全相同</strong>的 Key，即 `my_private_knowledge`。
+- <strong>Embeddings</strong>: 必须使用与第一部分<strong>完全相同</strong>的 `Embeddings Google Gemini` 模型。
+
+只有 `Memory Key` 和 `Embeddings` 模型完全一致，Agent 才能用正确的“钥匙”和“语言”来访问知识库,如图5.48所示。
+
+<div align="center">
+  <img src="https://raw.githubusercontent.com/datawhalechina/Hello-Agents/main/docs/images/5-figures/n8n-11.png" alt="" width="90%"/>
+  <p>图 5.48 Simple Vector Store工具配置</p>
+</div>
+
+Description参数即AI Agent调用该工具时，对该工具的描述定义，在这里也给出对应的Prompt：
+
+```json
+这是Simple Vector Store2工具，用来查询我的个人信息，特别是我的工作时间和邮件回复策略。当需要判断当前是否为工作时间，或者需要告知对方我何时会回复邮件时，必须使用此工具。
+```
+
+对于Memory唯一需要注意的是，这里我们使用每个邮箱的线程名作为唯一标识，能保证存储的唯一性，设置的Key为`{{ $('Gmail').item.json.threadId }}`
+
+
+
+(4) 发送最终回复
+
+最后一步是执行。将 `AI Agent` 节点的输出连接到一个 `Gmail` 节点，<strong>Operation</strong> 设为 `Send`。使用 n8n 表达式，将收件人、主题和正文分别关联到 `AI Agent` 输出的 JSON 数据中的相应字段，即可实现邮件的自动回复，如图5.49所示。
+
+- <strong>To</strong>: `{{ $('Gmail').item.json.From }}` (或其他触发器中的发件人字段)
+- <strong>Subject</strong>: `Re:  {{ $('Gmail').item.json.Subject }}`
+- <strong>Message</strong>: `{{ $json.output }}`
+
+<div align="center">
+  <img src="https://raw.githubusercontent.com/datawhalechina/Hello-Agents/main/docs/images/5-figures/n8n-12.png" alt="" width="90%"/>
+  <p>图 5.49 最终回复工具图示</p>
+</div>
+
+并且发送成功的同时，也能在个人邮箱收到真实的返回邮件信息，如图5.50所示。
+
+<div align="center">
+  <img src="https://raw.githubusercontent.com/datawhalechina/Hello-Agents/main/docs/images/5-figures/n8n-13.png" alt="" width="90%"/>
+  <p>图 5.50 个人邮箱返回邮件格式</p>
+</div>
+
+至此，一个基于 `AI Agent` 节点的一体化智能客服就构建完成了，你可以发送一封测试邮件来检验它的工作成果。这个架构的扩展性极强。未来，您可以直接向 `AI Agent` 节点添加更多的工具（如日历、数据库、CRM 等），只需在 Prompt 中教会 Agent 如何使用它们，就能不断赋予您的 Agent 更强大的能力。
+
+### 5.4.5 n8n 的优势与局限性分析
+
+通过前面从零到一构建智能邮件助手的实践，我们已经对 n8n 的工作模式有了直观的感受。作为一个强大的低代码自动化平台，n8n 在赋能 Agent 应用开发方面表现出色，但它也并非万能。如表5.1所示，我们将客观地分析其优势与潜在的局限性。
+
+<div align="center">
+  <p>表 5.1 n8n 平台的优势与局限性总结</p>
+  <img src="https://raw.githubusercontent.com/datawhalechina/Hello-Agents/main/docs/images/5-figures/n8n-14.png" alt="" width="90%"/>
+</div>
+
+首先，n8n 最显著的优势在于其<strong>开发效率</strong>。它将复杂的逻辑抽象为直观的可视化工作流，无论是邮件的接收、AI 的决策，还是工具的调用和最终的回复，整个数据流和处理链路都在画布上一目了然。这种低代码的特性极大地降低了技术门槛，让开发者能够快速搭建和验证 Agent 的核心逻辑，极大地缩短了从想法到原型的距离。
+
+其次，平台的<strong>功能强大且高度集成</strong>。n8n 拥有丰富的内置节点库，可以轻松连接像 Gmail、Google Gemini 等数百种常见服务。更重要的是，其先进的 `AI Agent` 节点将模型、记忆和工具管理高度整合，让我们能用一个节点就实现复杂的自主决策，这比传统的多节点手动路由方式要优雅和强大得多。同时，对于内置功能无法覆盖的场景，`Code` 节点也提供了编写自定义代码的灵活性，保证了功能的上限。
+
+最后，在<strong>部署运维</strong>层面，n8n 支持<strong>私有化部署</strong>，并且也是目前相对比较简单且能部署完整版项目的私有化Agent方案，这一点对于注重数据安全和隐私的企业至关重要。我们可以将整个服务部署在自己的服务器上，确保类似内部邮件、客户数据等敏感信息不离开自有环境，这为 Agent 应用的合规性提供了坚实的基础。
+
+当然，每个工具都有其取舍。在享受 n8n 带来便利的同时，我们也必须认识到其局限性。
+
+在<strong>开发效率</strong>的背后，是<strong>调试与错误处理的相对繁琐</strong>。当工作流变得复杂时，一旦出现数据格式错误，开发者可能需要逐个节点检查其输入输出来定位问题，这有时不如在代码中设置断点来得直接。
+
+功能方面，最大的局限性体现在其<strong>内置存储的非持久性</strong>。我们在案例中使用的 `Simple Memory` 和 `Simple Vector Store` 都是基于内存的，这意味着 n8n 服务一旦重启，所有对话历史和知识库都将丢失。这对于生产环境的应用是致命的。因此，在实际部署时，必须将其替换为如 Redis、Pinecone 等外部持久化数据库，这也会增加了额外的配置和维护成本。
+
+此外，在<strong>部署运维</strong>和团队协作上，n8n 的<strong>版本控制和多人协作不如传统代码成熟</strong>。虽然可以将工作流导出为 JSON 文件进行管理，但对比其变更远不如 `git diff` 代码来得清晰，多人同时编辑同一个工作流也容易产生冲突。
+
+最后是关于<strong>性能</strong>，n8n 完全能满足绝大多数企业自动化和中低频次的 Agent 任务。但对于需要处理超高并发请求的场景，其节点调度机制可能会带来一定的性能开销，相比于纯代码实现的服务可能稍逊一筹。
+
+## 5.5 本章小结
+
+本章系统介绍了基于低代码平台构建智能体应用的理念、方法与实践，标志着我们从"手写代码"向"平台化开发"的重要转变。
+
+在第一节中，我们阐述了低代码平台兴起的背景与价值。相比于第四章中纯代码实现的智能体，低代码平台通过图形化、模块化的方式，显著降低了技术门槛、提升了开发效率，并提供了更优的可视化调试体验。这种"更高层次的抽象"让开发者能够将精力聚焦于业务逻辑和提示工程，而非底层实现细节。
+
+随后，我们深入实践了三个各具特色的代表性平台:
+
+**Coze** 以其零代码的友好体验和丰富的插件生态脱颖而出。通过"每日AI简报"案例，我们体验了如何通过拖拽式配置快速整合多源信息，并一键发布到多个主流平台。Coze 特别适合非技术背景用户和需要快速验证创意的场景，但其不支持 MCP 和无法导出标准化配置文件的局限性也值得注意。
+
+**Dify** 作为开源的企业级平台，展现了全栈式开发能力。"超级智能体个人助手"案例涵盖了日常问答、文案优化、多模态生成、数据分析和 MCP 工具集成等多个模块，充分展示了 Dify 在复杂业务场景下的强大编排能力。其丰富的插件市场(8000+)、灵活的部署方式和企业级安全特性，使其成为专业开发者和企业团队的理想选择。然而，相对陡峭的学习曲线和在高并发场景下的性能挑战也需要权衡。
+
+**n8n** 则以其独特的"连接"能力开辟了另一条路径。通过"智能邮件助手"案例，我们看到了如何将 AI 能力无缝嵌入到复杂的业务自动化流程中。n8n 的 AI Agent 节点将模型、记忆和工具高度整合，配合其数百个预置节点，能够实现高度定制化的自动化方案。其支持私有化部署的特性对注重数据安全的企业尤为重要。但内置存储的非持久性和版本控制的不成熟，在生产环境中需要额外的工程化处理。
+
+通过三个平台的对比实践，我们可以得出以下选型建议:
+- **快速原型验证、非技术用户**: 优先选择 Coze
+- **企业级应用、复杂业务逻辑**: 优先选择 Dify
+- **深度业务集成、自动化流程**: 优先选择 n8n
+
+值得强调的是，低代码平台并非要取代代码开发，而是提供了一种互补的选择。在实际项目中，我们完全可以根据不同阶段的需求灵活切换:用低代码平台快速验证想法，用代码实现精细化控制;用平台处理标准化流程，用代码处理特殊逻辑。这种"混合开发"的思维，才是智能体工程化的最佳实践。
+
+下一章，我们将进一步探讨更加底层的智能体框架，帮助读者构建更加可靠、有趣的应用。
+
+
+## 习题
+
+1. 本章介绍了三个各具特色的低代码平台：`Coze`、`Dify` 和 `n8n`。请分析：
+
+   - 这三个平台在核心定位和设计理念上有什么区别？它们分别解决了智能体开发中的哪些痛点？
+   - 低代码平台与纯代码开发各有优劣，此外，也有部分功能用平台实现，部分功能用代码实现的"混合开发"模式。思考三种开发模式分别适合哪些场景？请举例说明。
+   
+2. 在5.2节的 `Coze` 案例中，我们构建了一个"每日AI简报"智能体。请基于此案例进行扩展思考：
+
+   > <strong>提示</strong>：这是一道动手实践题，建议实际操作
+
+   - 当前的简报生成是被动触发的（用户主动询问）。如何改造这个智能体，使其能够每天早上8点自动生成简报并推送到指定的飞书群或微信公众号？
+   - 简报的质量高度依赖于提示词设计。请尝试优化5.2.2节中的提示词，使生成的简报更加专业、结构更清晰，或者增加"热点分析"、"趋势预测"等新功能。
+   - `Coze` 当前不支持 `MCP` 协议被认为是一个重要局限（在习题的写作过程中，`feature-mcp` 虽然在 [`Coze Studio Q4 2025 Product Roadmap`](https://github.com/coze-dev/coze-studio/issues/2218) 中了，但是还尚未实现）。请简述，什么是 `MCP` 协议？它为什么重要？如果 `Coze` 未来支持 `MCP`，会带来哪些新的可能性？
+
+3. 在5.3节的 `Dify` 案例中，我们构建了一个功能全面的"超级智能体个人助手"。请深入分析：
+
+   - 案例中使用了"问题分类器"进行智能路由，将不同类型的请求分发到不同的子智能体。这种多智能体架构有什么优势？如果不使用分类器，而是让一个单一的智能体处理所有任务，会遇到什么问题？
+   - 数据查询模块需要为大模型提供清晰的表结构信息。如果数据库有50张表、每张表有20个字段，直接将所有 `DDL` 语句放入提示词会导致上下文过长。请设计一个更智能的方案来解决这个问题。
+   - `Dify` 支持本地部署和云端部署两种模式。请对比这两种模式在数据安全、成本、性能、维护难度等方面的差异，并说明各自适用的场景。
+
+4. 在5.4节的 `n8n` 案例中，我们构建了一个"智能邮件助手"。请思考以下问题：
+
+   > <strong>提示</strong>：这是一道动手实践题，建议实际操作
+
+   - 案例中使用的 `Simple Vector Store` 和 `Simple Memory` 都是基于内存的，服务重启后数据会丢失。请查阅 `n8n` 文档，尝试将其替换为持久化存储方案（如 `Pinecone`、`Redis` 等），并说明配置过程。
+   - 当前的邮件助手只能处理文本邮件。如果用户发送的邮件中包含附件（如 `PDF` 文档、图片），你会如何扩展这个工作流，使智能体能够理解附件内容并做出相应回复？
+   - `n8n` 的核心优势在于"连接"能力。请设计一个更复杂的自动化场景：当客户在电商平台下单后，自动触发一系列操作（发送确认邮件、更新库存数据库、通知物流系统、在 `CRM` 中记录客户信息）。请画出工作流的节点连接图并说明关键配置。
+
+5. 提示词工程在低代码平台中同样至关重要。本章展示了多个平台的提示词设计案例。请分析：
+
+   - 对比5.2.2节（`Coze`）、5.3.2节（`Dify`）和5.4.4节（`n8n`）中的提示词设计，它们在结构、风格和侧重点上有什么不同？这些差异是否与平台特性相关？
+   - 在 `Dify` 的"文案优化模块"中，提示词要求输出"超过500字"。这种对输出长度的硬性要求是否合理？在什么情况下应该限制输出长度，什么情况下应该让模型自由发挥？
+   
+6. 工具和插件是低代码平台的核心能力扩展方式。请思考：
+
+   - `Coze` 拥有丰富的插件商店，`Dify` 拥有8000+的插件市场，`n8n` 拥有数百个预置节点。如果这三个平台都没有你需要的某个特定工具（如"连接公司内部系统的 `API`"），你会如何解决？
+   - 在5.3.2节中，我们使用了 `MCP` 协议集成了高德地图、饮食推荐等服务。请调研并说明：`MCP` 协议与传统的 `RESTful API` 以及 `Tool Calling` 有哪些区别？为什么说 `MCP` 是智能体工具调用的"新标准"？
+   - 假设你要为 `Dify` 开发一个自定义插件，使其能够调用你公司的内部知识库系统。请查阅 `Dify` 的插件开发文档，概述开发流程和关键技术点。
+
+7. 平台选型是智能体产品成功的关键决策之一。假设你是一家初创公司的技术负责人，公司计划开发以下三个AI应用，请为每个应用选择最合适的平台（`Coze`、`Dify`、`n8n` 或纯代码开发），并详细说明理由：
+
+   <strong>应用A</strong>：面向C端用户的"AI写作助手"小程序，需要快速上线验证市场需求，预算有限，团队中只有1名前端工程师和1名产品经理。
+
+   <strong>应用B</strong>：面向企业客户的"智能合同审核系统"，需要处理敏感的法律文档，要求数据不能离开客户的私有环境，需要与客户现有的OA系统、文档管理系统深度集成。
+
+   <strong>应用C</strong>：内部使用的"研发效能提升工具"，需要自动化处理代码审查、测试报告生成、Bug跟踪、项目进度同步等多个研发流程环节，团队有较强的技术实力。
+
+   对于每个应用，请从以下维度（包括但不限于）进行分析：
+   
+   > <strong>提示</strong>：平台能力是否满足需求，多快能上线，开发成本、运营成本，后续迭代的难度，未来功能扩展的空间
+   
+   - 技术可行性
+   - 开发效率
+   - 成本控制
+   - 可维护性
+   - 可扩展性
+   - 数据安全与合规性
+
+## 参考文献
+
+[1] Coze - 新一代 AI 应用开发平台. https://www.coze.cn/
+
+[2] Dify - 开源的 LLM 应用开发平台. https://dify.ai/
+
+[3] n8n - 工作流自动化工具. https://n8n.io/
