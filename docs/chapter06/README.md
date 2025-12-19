@@ -181,7 +181,7 @@ PATEOAS：用户 → 提示词(状态₀) → AI → 响应 + 状态₁（状态
 
 ---
 
-[上一章：PromptX 智能体上下文平台](../chapter05/README.md) | [返回总目录](../README.md) | [下一章：主流多智能体框架](../chapter07/README.md)
+[上一章：PromptX 智能体上下文平台](../chapter05/README.md) | [返回总目录](../README.md) | [下一章：AgentX 事件驱动智能体框架](../chapter07/README.md)
 
 ---
 
