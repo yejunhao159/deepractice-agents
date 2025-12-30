@@ -1,0 +1,49 @@
+name: 同步文档到飞书知识库
+
+on:
+  # 推送到 main 分支时触发
+  push:
+    branches:
+      - main
+    paths:
+      - 'docs/**'  # 只有 docs 目录变化时触发
+
+  # 支持手动触发
+  workflow_dispatch:
+    inputs:
+      docs_dir:
+        description: '要同步的文档目录'
+        required: false
+        default: 'docs'
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    name: 同步到飞书
+
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v4
+
+      - name: 设置 Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: 同步文档到飞书
+        env:
+          FEISHU_APP_ID: ${{ secrets.FEISHU_APP_ID }}
+          FEISHU_APP_SECRET: ${{ secrets.FEISHU_APP_SECRET }}
+          FEISHU_SPACE_ID: ${{ secrets.FEISHU_SPACE_ID }}
+          DOCS_DIR: ${{ github.event.inputs.docs_dir || 'docs' }}
+        run: |
+          node scripts/sync-to-feishu.cjs
+
+      - name: 同步结果通知
+        if: always()
+        run: |
+          if [ "${{ job.status }}" == "success" ]; then
+            echo "✅ 文档同步成功！"
+          else
+            echo "❌ 文档同步失败，请检查日志"
+          fi
