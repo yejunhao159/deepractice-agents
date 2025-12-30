@@ -224,18 +224,46 @@ async function updateDocument(token, documentId, blocks) {
 }
 
 /**
- * 获取知识库节点列表
+ * 获取知识库所有节点列表（支持分页）
  */
 async function getWikiNodes(token, spaceId) {
+  let allNodes = [];
+  let pageToken = null;
+
+  do {
+    let url = `/open-apis/wiki/v2/spaces/${spaceId}/nodes?page_size=50`;
+    if (pageToken) {
+      url += `&page_token=${pageToken}`;
+    }
+
+    const res = await request('GET', url, null, token);
+
+    if (res.code !== 0) {
+      console.error(`❌ 获取节点列表失败: ${res.msg}`);
+      return allNodes;
+    }
+
+    if (res.data.items) {
+      allNodes = allNodes.concat(res.data.items);
+    }
+    pageToken = res.data.page_token;
+  } while (pageToken);
+
+  return allNodes;
+}
+
+/**
+ * 获取文档所有 blocks
+ */
+async function getDocumentBlocks(token, documentId) {
   const res = await request(
     'GET',
-    `/open-apis/wiki/v2/spaces/${spaceId}/nodes?page_size=50`,
+    `/open-apis/docx/v1/documents/${documentId}/blocks?page_size=500`,
     null,
     token
   );
 
   if (res.code !== 0) {
-    console.error(`❌ 获取节点列表失败: ${res.msg}`);
     return [];
   }
 
@@ -243,10 +271,88 @@ async function getWikiNodes(token, spaceId) {
 }
 
 /**
+ * 删除文档中的 block
+ */
+async function deleteBlock(token, documentId, blockId) {
+  const res = await request(
+    'DELETE',
+    `/open-apis/docx/v1/documents/${documentId}/blocks/${blockId}`,
+    null,
+    token
+  );
+  return res.code === 0;
+}
+
+/**
+ * 清空文档内容（保留文档本身）
+ */
+async function clearDocumentContent(token, documentId) {
+  const blocks = await getDocumentBlocks(token, documentId);
+
+  // 跳过第一个 block（通常是 page block，不能删除）
+  const blocksToDelete = blocks.filter(b => b.block_type !== 1);
+
+  for (const block of blocksToDelete) {
+    await deleteBlock(token, documentId, block.block_id);
+    await new Promise((resolve) => setTimeout(resolve, 100));
+  }
+}
+
+/**
+ * 删除知识库节点
+ */
+async function deleteWikiNode(token, spaceId, nodeToken) {
+  const res = await request(
+    'DELETE',
+    `/open-apis/wiki/v2/spaces/${spaceId}/nodes/${nodeToken}`,
+    null,
+    token
+  );
+
+  return res.code === 0;
+}
+
+/**
+ * 清空知识库所有节点
+ */
+async function cleanWikiSpace(token, spaceId) {
+  console.log('🗑️  清空知识库...');
+  const nodes = await getWikiNodes(token, spaceId);
+  console.log(`   找到 ${nodes.length} 个节点需要删除`);
+
+  let deleted = 0;
+  for (const node of nodes) {
+    const success = await deleteWikiNode(token, spaceId, node.node_token);
+    if (success) {
+      console.log(`   🗑️  已删除: ${node.title}`);
+      deleted++;
+    } else {
+      console.log(`   ❌ 删除失败: ${node.title}`);
+    }
+    await new Promise((resolve) => setTimeout(resolve, 300));
+  }
+
+  console.log(`✅ 清空完成，删除了 ${deleted} 个节点\n`);
+}
+
+/**
  * 主函数
  */
 async function main() {
+  const args = process.argv.slice(2);
+  const forceMode = args.includes('--force') || args.includes('-f');
+  const updateMode = args.includes('--update') || args.includes('-u');
+  const cleanOnly = args.includes('--clean');
+
   console.log('🚀 开始同步文档到飞书知识库...\n');
+
+  if (forceMode) {
+    console.log('⚠️  强制模式：将先清空知识库再重新同步\n');
+  }
+
+  if (updateMode) {
+    console.log('📝 更新模式：将更新已存在文档的内容\n');
+  }
 
   // 检查配置
   if (!CONFIG.APP_ID || !CONFIG.APP_SECRET) {
@@ -263,6 +369,15 @@ async function main() {
     // 获取 token
     const token = await getTenantToken();
 
+    // 如果是清空模式或强制模式，先删除所有节点
+    if (cleanOnly || forceMode) {
+      await cleanWikiSpace(token, CONFIG.SPACE_ID);
+      if (cleanOnly) {
+        console.log('✅ 清空完成，退出');
+        process.exit(0);
+      }
+    }
+
     // 读取 Markdown 文件
     const docsPath = path.resolve(CONFIG.DOCS_DIR);
     console.log(`\n📂 扫描文档目录: ${docsPath}`);
@@ -277,7 +392,7 @@ async function main() {
 
     // 获取现有节点（用于避免重复创建）
     const existingNodes = await getWikiNodes(token, CONFIG.SPACE_ID);
-    const existingTitles = new Set(existingNodes.map((n) => n.title));
+    const existingNodesMap = new Map(existingNodes.map((n) => [n.title, n]));
 
     // 按目录分组
     const dirMap = new Map();
@@ -291,6 +406,7 @@ async function main() {
 
     // 统计
     let created = 0;
+    let updated = 0;
     let skipped = 0;
     let failed = 0;
 
@@ -300,27 +416,48 @@ async function main() {
 
       for (const file of dirFiles) {
         const title = file.name;
+        const existingNode = existingNodesMap.get(title);
 
-        if (existingTitles.has(title)) {
-          console.log(`⏭️  跳过已存在: ${title}`);
-          skipped++;
-          continue;
-        }
+        if (existingNode) {
+          if (updateMode) {
+            // 更新模式：清空并重写内容
+            console.log(`📝 更新文档: ${title}`);
+            try {
+              await clearDocumentContent(token, existingNode.obj_token);
+              const blocks = markdownToFeishuBlocks(file.content);
+              const success = await updateDocument(token, existingNode.obj_token, blocks);
+              if (success) {
+                console.log(`✅ 更新成功: ${title}`);
+                updated++;
+              } else {
+                console.log(`❌ 更新失败: ${title}`);
+                failed++;
+              }
+            } catch (e) {
+              console.log(`❌ 更新失败: ${title} - ${e.message}`);
+              failed++;
+            }
+          } else {
+            console.log(`⏭️  跳过已存在: ${title}`);
+            skipped++;
+          }
+        } else {
+          // 创建新文档
+          const node = await createWikiNode(token, CONFIG.SPACE_ID, title);
 
-        const node = await createWikiNode(token, CONFIG.SPACE_ID, title);
+          if (node) {
+            const blocks = markdownToFeishuBlocks(file.content);
+            const success = await updateDocument(token, node.obj_token, blocks);
 
-        if (node) {
-          const blocks = markdownToFeishuBlocks(file.content);
-          const success = await updateDocument(token, node.obj_token, blocks);
-
-          if (success) {
-            console.log(`✅ 同步成功: ${title}`);
-            created++;
+            if (success) {
+              console.log(`✅ 创建成功: ${title}`);
+              created++;
+            } else {
+              failed++;
+            }
           } else {
             failed++;
           }
-        } else {
-          failed++;
         }
 
         // 避免请求过快
@@ -332,6 +469,7 @@ async function main() {
     console.log('\n' + '='.repeat(50));
     console.log('📊 同步完成统计:');
     console.log(`   ✅ 新建: ${created}`);
+    console.log(`   📝 更新: ${updated}`);
     console.log(`   ⏭️  跳过: ${skipped}`);
     console.log(`   ❌ 失败: ${failed}`);
     console.log('='.repeat(50));
