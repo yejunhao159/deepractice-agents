@@ -1,0 +1,91 @@
+@startmindmap
+title 第2章：智能体发展史 - 知识全景图
+<style>
+mindmapDiagram {
+  :depth(0) {
+    BackgroundColor #9B59B6
+    FontColor white
+    FontSize 18
+  }
+  :depth(1) {
+    BackgroundColor #3498DB
+    FontColor white
+    FontSize 14
+  }
+  :depth(2) {
+    BackgroundColor #2ECC71
+    FontColor white
+    FontSize 12
+  }
+  :depth(3) {
+    BackgroundColor #E74C3C
+    FontColor white
+    FontSize 11
+  }
+}
+</style>
+
+* 智能体发展史\n从自动机到AI Agent
+
+** 2.1 符号主义时代
+*** 机械自动机 (1700s)
+**** 沃康松的机械鸭
+**** 雅卡尔织布机
+*** 图灵机 (1936)
+**** 理论计算模型
+**** 可计算性理论
+*** 专家系统 (1970s-80s)
+**** MYCIN 医疗诊断
+**** DENDRAL 化学分析
+**** 知识工程
+
+** 2.2 规则聊天机器人
+*** ELIZA (1966)
+**** Joseph Weizenbaum
+**** 模式匹配
+**** 心理治疗师模拟
+*** 规则引擎
+**** IF-THEN 规则
+**** 关键词触发
+**** 状态机管理
+
+left side
+
+** 2.3 心智社会理论
+*** Marvin Minsky
+**** 《心智社会》1986
+**** 智能涌现论
+*** 核心思想
+**** 智能 = 无智能部件的协作
+**** Agent 即心智模块
+**** 涌现大于部分之和
+*** 对现代的启示
+**** 多智能体系统
+**** 模块化设计
+**** 协作涌现
+
+** 2.4 学习范式演进
+*** 行为主义
+**** 强化学习
+**** 奖惩机制
+*** 连接主义
+**** 神经网络
+**** 深度学习
+*** 符号+神经
+**** 混合系统
+**** 知识图谱+LLM
+
+** 2.5 智能体爆发时代
+*** LLM 突破 (2022+)
+**** GPT-3.5/4
+**** Claude
+**** 涌现能力
+*** Agent 框架涌现
+**** AutoGPT
+**** BabyAGI
+**** AgentGPT
+*** 走向生产
+**** 可靠性挑战
+**** 工程化需求
+
+@endmindmap

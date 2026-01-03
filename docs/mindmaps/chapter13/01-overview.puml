@@ -1,0 +1,49 @@
+@startmindmap
+title 第13章：代码助手实战 - 知识全景图
+<style>
+mindmapDiagram {
+  :depth(0) { BackgroundColor #9B59B6; FontColor white; FontSize 18 }
+  :depth(1) { BackgroundColor #1ABC9C; FontColor white; FontSize 14 }
+  :depth(2) { BackgroundColor #E67E22; FontColor white; FontSize 12 }
+  :depth(3) { BackgroundColor #3498DB; FontColor white; FontSize 11 }
+}
+</style>
+
+* 代码助手实战\n智能编程伙伴
+
+** 需求分析
+*** 核心功能
+**** 代码生成
+**** 代码解释
+**** Bug 修复
+**** 代码重构
+*** 用户场景
+*** 技术约束
+
+** 架构设计
+*** 整体架构
+*** 组件设计
+**** 代码解析器
+**** 上下文管理器
+**** 代码生成器
+**** 测试执行器
+
+left side
+
+** 完整实现
+*** 角色定义
+**** PromptX 配置
+*** 工具集成
+**** 文件操作
+**** 代码执行
+**** 测试运行
+*** 记忆系统
+**** 项目上下文
+**** 代码片段库
+
+** 进阶特性
+*** 多文件处理
+*** 增量修改
+*** 代码审查
+
+@endmindmap

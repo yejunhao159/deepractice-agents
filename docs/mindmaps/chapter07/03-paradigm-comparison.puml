@@ -1,0 +1,52 @@
+@startuml
+title 三种范式对比
+
+skinparam backgroundColor #FEFEFE
+
+rectangle "ReAct 范式" as ReAct #E74C3C {
+  rectangle "特点" as R1 {
+    card "思考-行动交织" #FADBD8
+    card "实时决策" #FADBD8
+    card "灵活应变" #FADBD8
+  }
+  rectangle "流程" as R2 {
+    (Thought) --> (Action)
+    (Action) --> (Observation)
+    (Observation) --> (Thought)
+  }
+}
+
+rectangle "Plan-and-Solve 范式" as PaS #F39C12 {
+  rectangle "特点" as P1 {
+    card "先规划后执行" #FEF5E7
+    card "全局视角" #FEF5E7
+    card "步骤清晰" #FEF5E7
+  }
+  rectangle "流程" as P2 {
+    (Plan) --> (Step 1)
+    (Step 1) --> (Step 2)
+    (Step 2) --> (Step N)
+  }
+}
+
+rectangle "Reflection 范式" as Ref #2ECC71 {
+  rectangle "特点" as Rf1 {
+    card "自我评估" #E8F8F5
+    card "持续改进" #E8F8F5
+    card "质量优先" #E8F8F5
+  }
+  rectangle "流程" as Rf2 {
+    (Execute) --> (Evaluate)
+    (Evaluate) --> (Refine)
+    (Refine) --> (Execute)
+  }
+}
+
+legend bottom
+  |= 范式 |= 适用场景 |= LLM 调用次数 |= 可解释性 |
+  | ReAct | 探索性任务、工具密集 | 中 | 高 |
+  | Plan-and-Solve | 复杂任务、明确目标 | 低-中 | 高 |
+  | Reflection | 质量敏感、需迭代 | 高 | 最高 |
+end legend
+
+@enduml

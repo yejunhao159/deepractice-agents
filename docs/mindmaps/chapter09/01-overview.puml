@@ -1,0 +1,58 @@
+@startmindmap
+title 第9章：Monogent 认知架构 - 知识全景图
+<style>
+mindmapDiagram {
+  :depth(0) { BackgroundColor #8E44AD; FontColor white; FontSize 18 }
+  :depth(1) { BackgroundColor #2ECC71; FontColor white; FontSize 14 }
+  :depth(2) { BackgroundColor #E74C3C; FontColor white; FontSize 12 }
+  :depth(3) { BackgroundColor #3498DB; FontColor white; FontSize 11 }
+}
+</style>
+
+* Monogent\n认知架构
+
+** 9.1 架构设计
+*** Experience 体验单子
+**** 认知原子单位
+**** 链式追踪
+*** 与 Engram 关系
+**** Engram 管存储
+**** Monogent 管处理
+
+** 9.2 Experience & Evolution
+*** Experience 结构
+**** id, content
+**** substrate
+**** metadata
+**** prev/next
+*** 微演化
+**** 单次更新
+*** 宏演化
+**** 跨周期积累
+
+left side
+
+** 9.3 七阶段管道
+*** Sensation 感觉
+*** Perception 知觉
+*** Representation 表征
+*** Activation 激活
+*** Association 联想
+*** Recollection 回忆
+*** Integration 整合
+
+** 9.4 双基质模型
+*** Computation
+**** 确定性、快速
+**** 模式匹配
+*** Generation
+**** 概率性、灵活
+**** 语义理解
+*** 智能选择策略
+
+** 9.5 系统集成
+*** PromptX 记忆
+*** AgentX 运行时
+*** 完整认知智能体
+
+@endmindmap

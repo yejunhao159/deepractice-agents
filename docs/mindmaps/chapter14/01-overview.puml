@@ -1,0 +1,50 @@
+@startmindmap
+title 第14章：知识问答系统 - 知识全景图
+<style>
+mindmapDiagram {
+  :depth(0) { BackgroundColor #27AE60; FontColor white; FontSize 18 }
+  :depth(1) { BackgroundColor #E74C3C; FontColor white; FontSize 14 }
+  :depth(2) { BackgroundColor #3498DB; FontColor white; FontSize 12 }
+  :depth(3) { BackgroundColor #F39C12; FontColor white; FontSize 11 }
+}
+</style>
+
+* 知识问答系统\n企业级智能问答
+
+** RAG 集成
+*** 文档处理
+**** 文档加载
+**** 文本分块
+*** 向量化
+**** Embedding 模型
+**** 向量存储
+*** 检索策略
+**** 相似度检索
+**** 混合检索
+
+** 多轮对话
+*** 对话管理
+**** 状态追踪
+**** 意图识别
+*** 上下文维护
+**** 历史压缩
+**** 指代消解
+
+left side
+
+** 知识库管理
+*** 知识组织
+**** 分类体系
+**** 知识图谱
+*** 质量控制
+**** 准确性校验
+**** 时效性管理
+
+** 评估优化
+*** 评估指标
+**** 准确率
+**** 召回率
+**** 用户满意度
+*** 优化策略
+
+@endmindmap

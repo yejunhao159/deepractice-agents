@@ -1,0 +1,68 @@
+@startuml
+title RAG vs 真正的记忆系统对比
+
+skinparam backgroundColor #FEFEFE
+
+rectangle "传统 RAG 系统" as RAG #E74C3C {
+
+  card "文档" as D1 #FADBD8
+  card "分块" as D2 #FADBD8
+  card "向量化" as D3 #FADBD8
+  database "向量库" as VDB #FADBD8
+  card "检索" as D4 #FADBD8
+  card "拼接" as D5 #FADBD8
+  card "生成" as D6 #FADBD8
+
+  D1 -right-> D2 : 固定切分
+  D2 -right-> D3 : Embedding
+  D3 -down-> VDB : 存储
+  VDB -right-> D4 : 相似度匹配
+  D4 -right-> D5 : Top-K
+  D5 -right-> D6 : Prompt
+
+  note bottom of RAG
+    **特点**
+    - 被动检索（需要查询触发）
+    - 语义相似度匹配
+    - 无上下文理解
+    - 片段孤立
+  end note
+}
+
+rectangle "Engram 记忆网络" as Engram #2ECC71 {
+
+  card "体验" as E1 #E8F8F5
+  card "编码" as E2 #E8F8F5
+  card "语义网络" as E3 #E8F8F5
+  card "激活扩散" as E4 #E8F8F5
+  card "联想召回" as E5 #E8F8F5
+  card "整合理解" as E6 #E8F8F5
+
+  E1 -right-> E2 : 多维编码\ncontent/schema/strength
+  E2 -right-> E3 : 概念关联
+  E3 -down-> E4 : 自动激活
+  E4 -right-> E5 : 多跳联想
+  E5 -right-> E6 : 上下文整合
+
+  note bottom of Engram
+    **特点**
+    - 主动联想（概念触发激活）
+    - 语义网络关联
+    - 上下文理解
+    - 记忆整合
+  end note
+}
+
+RAG -[hidden]down-> Engram
+
+legend right
+  |= 维度 |= RAG |= Engram |
+  | 触发方式 | 查询驱动 | 联想激活 |
+  | 检索机制 | 向量相似 | 语义关联 |
+  | 结果关系 | 独立片段 | 网络连接 |
+  | 上下文 | 无 | 有 |
+  | 遗忘机制 | 无 | 有 |
+  | 类比 | 图书馆索引 | 人脑记忆 |
+end legend
+
+@enduml

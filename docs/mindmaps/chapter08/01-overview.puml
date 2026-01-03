@@ -1,0 +1,47 @@
+@startmindmap
+title 第8章：主流框架对比 - 知识全景图
+<style>
+mindmapDiagram {
+  :depth(0) { BackgroundColor #34495E; FontColor white; FontSize 18 }
+  :depth(1) { BackgroundColor #3498DB; FontColor white; FontSize 14 }
+  :depth(2) { BackgroundColor #E67E22; FontColor white; FontSize 12 }
+  :depth(3) { BackgroundColor #1ABC9C; FontColor white; FontSize 11 }
+}
+</style>
+
+* 主流框架对比\n多智能体框架选型
+
+** AutoGen
+*** 微软开源
+*** 对话驱动
+*** ConversableAgent
+*** GroupChat
+*** 代码执行
+
+** LangGraph
+*** LangChain 生态
+*** 图结构工作流
+*** StateGraph
+*** 条件边
+
+left side
+
+** CrewAI
+*** 角色扮演
+*** 团队协作
+*** Agent-Task-Crew
+*** 简单易用
+
+** CAMEL
+*** 研究导向
+*** 角色扮演通信
+*** 行为研究
+
+** 选型指南
+*** 简单任务 → CrewAI
+*** 复杂流程 → LangGraph
+*** 对话密集 → AutoGen
+*** 研究探索 → CAMEL
+*** 认知优先 → AgentX + PromptX
+
+@endmindmap

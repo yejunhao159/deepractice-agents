@@ -1,0 +1,68 @@
+@startuml
+title AI 组织化演进路径
+
+skinparam backgroundColor #FEFEFE
+
+' 演进阶段
+rectangle "阶段 1: 工具\nTool" as Stage1 #95A5A6 {
+  card "被动响应" as S1_1 #D5DBDB
+  card "单次调用" as S1_2 #D5DBDB
+  card "无状态" as S1_3 #D5DBDB
+}
+
+rectangle "阶段 2: 助手\nAssistant" as Stage2 #3498DB {
+  card "对话交互" as S2_1 #AED6F1
+  card "上下文保持" as S2_2 #AED6F1
+  card "个性化" as S2_3 #AED6F1
+}
+
+rectangle "阶段 3: 代理\nAgent" as Stage3 #2ECC71 {
+  card "目标驱动" as S3_1 #ABEBC6
+  card "工具使用" as S3_2 #ABEBC6
+  card "自主规划" as S3_3 #ABEBC6
+  card "反思改进" as S3_4 #ABEBC6
+}
+
+rectangle "阶段 4: 团队\nTeam" as Stage4 #F39C12 {
+  card "角色分工" as S4_1 #FAD7A0
+  card "任务协作" as S4_2 #FAD7A0
+  card "信息共享" as S4_3 #FAD7A0
+  card "协调机制" as S4_4 #FAD7A0
+}
+
+rectangle "阶段 5: 组织\nOrganization" as Stage5 #9B59B6 {
+  card "层级结构" as S5_1 #D2B4DE
+  card "流程规范" as S5_2 #D2B4DE
+  card "知识沉淀" as S5_3 #D2B4DE
+  card "文化形成" as S5_4 #D2B4DE
+  card "集体智能" as S5_5 #D2B4DE
+}
+
+' 演进箭头
+Stage1 -right-> Stage2 : 对话能力
+Stage2 -right-> Stage3 : 自主性
+Stage3 -down-> Stage4 : 协作
+Stage4 -left-> Stage5 : 组织化
+
+' 四大要素
+note bottom of Stage5
+  **组织四大要素**
+
+  1. **角色分化**: 专业化分工
+  2. **知识共享**: 经验传承
+  3. **流程规范**: 标准化操作
+  4. **文化形成**: 价值观统一
+
+  **愿景**: AI 社会 + 人机共生
+end note
+
+legend right
+  |= 阶段 |= 自主性 |= 协作性 |
+  | 工具 | 无 | 无 |
+  | 助手 | 低 | 无 |
+  | 代理 | 中 | 低 |
+  | 团队 | 中 | 高 |
+  | 组织 | 高 | 高 |
+end legend
+
+@enduml

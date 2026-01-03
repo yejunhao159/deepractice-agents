@@ -1,0 +1,93 @@
+@startuml
+title AgentX 系统架构
+
+skinparam backgroundColor #FEFEFE
+skinparam component {
+  BackgroundColor #3498DB
+  FontColor white
+}
+skinparam interface {
+  BackgroundColor #2ECC71
+}
+
+package "AgentX Runtime" #ECF0F1 {
+
+  package "输入层 Input Layer" #E8F8F5 {
+    interface "HTTP API" as HTTP
+    interface "WebSocket" as WS
+    interface "CLI" as CLI
+
+    component [HTTP Driver] as HD
+    component [WS Driver] as WSD
+    component [CLI Driver] as CD
+
+    HTTP --> HD
+    WS --> WSD
+    CLI --> CD
+  }
+
+  package "核心层 Core Layer" #FEF9E7 {
+    component [SystemBus\n事件总线] as Bus #E74C3C
+
+    component [AgentEngine\n核心引擎] as Engine #9B59B6
+
+    component [State Manager\n状态管理] as SM
+
+    component [Memory Manager\n记忆管理] as MM
+
+    HD --> Bus
+    WSD --> Bus
+    CD --> Bus
+
+    Bus --> Engine
+    Engine --> SM
+    Engine --> MM
+  }
+
+  package "集成层 Integration Layer" #F4ECF7 {
+    component [PromptX\nAdapter] as PX
+    component [MCP\nConnector] as MCP
+    component [Claude\nSDK] as Claude
+
+    Engine --> PX : 角色/记忆
+    Engine --> MCP : 工具调用
+    Engine --> Claude : LLM 交互
+  }
+
+  package "输出层 Output Layer" #EBF5FB {
+    component [Text Presenter] as TP
+    component [JSON Presenter] as JP
+    component [Stream Presenter] as SP
+
+    interface "Response" as Resp
+
+    Bus --> TP
+    Bus --> JP
+    Bus --> SP
+
+    TP --> Resp
+    JP --> Resp
+    SP --> Resp
+  }
+
+  package "持久层 Persistence Layer" #FDF2E9 {
+    database "SQLite" as SQL
+    database "Memory" as Mem
+    database "File System" as FS
+
+    SM --> SQL
+    SM --> Mem
+    MM --> FS
+  }
+}
+
+' 外部系统
+cloud "Claude API" as API
+cloud "MCP Servers" as MCPS
+cloud "PromptX\nResources" as PXR
+
+Claude --> API
+MCP --> MCPS
+PX --> PXR
+
+@enduml

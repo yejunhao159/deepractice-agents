@@ -1,0 +1,70 @@
+@startuml
+title Monogent 七阶段认知管道
+
+skinparam backgroundColor #FEFEFE
+skinparam activity {
+  BackgroundColor #3498DB
+  FontColor white
+}
+
+|#E8F8F5|输入处理|
+start
+:原始输入;
+
+:1. Sensation 感觉;
+note right
+  原始信号接收
+  数据预处理
+  格式标准化
+end note
+
+:2. Perception 知觉;
+note right
+  特征检测
+  模式识别
+  实体抽取
+end note
+
+:3. Representation 表征;
+note right
+  语义编码
+  结构化表示
+  向量化
+end note
+
+|#FEF9E7|记忆交互|
+
+:4. Activation 激活;
+note right
+  相关记忆节点激活
+  权重计算
+  阈值过滤
+end note
+
+:5. Association 联想;
+note right
+  扩散激活
+  多跳关联
+  远距离连接
+end note
+
+:6. Recollection 回忆;
+note right
+  记忆召回
+  相关性排序
+  上下文整合
+end note
+
+|#F4ECF7|输出生成|
+
+:7. Integration 整合;
+note right
+  记忆 + 当前输入
+  统一理解
+  响应生成
+end note
+
+:认知输出;
+stop
+
+@enduml

@@ -1,0 +1,68 @@
+@startuml
+title 智能体技术演进时间线
+
+skinparam backgroundColor #FEFEFE
+
+scale 1.5
+
+concise "符号主义" as S
+concise "连接主义" as C
+concise "智能体范式" as A
+concise "LLM Agent" as L
+
+@1950
+S is {-}
+C is {-}
+A is {-}
+L is {-}
+
+@1956
+S is "达特茅斯会议\nAI诞生"
+
+@1966
+S is "ELIZA\n规则聊天"
+A is "简单反射式"
+
+@1970
+S is "专家系统\nMYCIN"
+
+@1986
+S is "心智社会\nMinsky"
+C is "反向传播\n复兴"
+
+@1997
+C is "深蓝\n战胜卡斯帕罗夫"
+
+@2012
+C is "AlexNet\n深度学习爆发"
+
+@2016
+C is "AlphaGo\n战胜李世石"
+A is "强化学习智能体"
+
+@2017
+C is "Transformer\n注意力机制"
+
+@2018
+L is "GPT-1\nBERT"
+
+@2020
+L is "GPT-3\n涌现能力"
+
+@2022
+L is "ChatGPT\nInstructGPT"
+A is "LLM Agent 元年"
+
+@2023
+L is "GPT-4\nClaude 2"
+A is "AutoGPT\nBabyAGI"
+
+@2024
+L is "Claude 3\nGPT-4o"
+A is "框架成熟\n生产落地"
+
+@2025
+L is "o1/o3\nClaude 4"
+A is "认知架构\n多智能体协作"
+
+@enduml

@@ -1,0 +1,83 @@
+@startuml
+title AgentX + PromptX 集成流程
+
+skinparam backgroundColor #FEFEFE
+skinparam participant {
+  BackgroundColor #3498DB
+  FontColor white
+}
+
+actor "用户" as User
+participant "AgentX\nRuntime" as AX #16A085
+participant "SystemBus\n事件总线" as Bus #E74C3C
+participant "PromptX\nAdapter" as PX #9B59B6
+participant "Engram\n记忆" as Engram #F39C12
+participant "Claude\nAPI" as Claude #3498DB
+
+== 初始化 ==
+User -> AX: 启动 Agent
+activate AX
+AX -> PX: 连接 PromptX
+activate PX
+PX -> PX: 加载可用角色/工具
+PX --> AX: 资源列表
+AX -> Bus: emit(agent_ready)
+
+== 角色激活 ==
+User -> AX: action("code-reviewer")
+AX -> Bus: emit(action_start)
+AX -> PX: 激活角色
+PX -> PX: 加载角色配置
+note right
+  - identity
+  - expertise
+  - principles
+  - personality
+end note
+PX --> AX: 角色上下文
+AX -> Bus: emit(role_activated)
+
+== 对话处理 ==
+User -> AX: 发送消息
+AX -> Bus: emit(user_message)
+
+AX -> PX: recall(query)
+PX -> Engram: 检索记忆
+activate Engram
+Engram -> Engram: 激活扩散
+Engram --> PX: 相关记忆
+deactivate Engram
+PX --> AX: 记忆上下文
+
+AX -> AX: 构建 Prompt
+note right
+  System: 角色配置
+  Context: 记忆上下文
+  User: 用户输入
+end note
+
+AX -> Bus: emit(thinking_start)
+AX -> Claude: 发送请求
+activate Claude
+
+loop 流式响应
+  Claude --> AX: chunk
+  AX -> Bus: emit(text_delta)
+end
+
+Claude --> AX: 完成
+deactivate Claude
+AX -> Bus: emit(thinking_end)
+
+== 记忆保存 ==
+AX -> PX: remember(engram)
+PX -> Engram: 保存记忆
+Engram --> PX: 确认
+PX --> AX: 完成
+
+AX -> Bus: emit(assistant_message)
+AX --> User: 返回响应
+deactivate PX
+deactivate AX
+
+@enduml

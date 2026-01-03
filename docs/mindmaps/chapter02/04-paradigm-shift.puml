@@ -1,0 +1,65 @@
+@startuml
+title 智能体范式演进对比
+
+skinparam backgroundColor #FEFEFE
+
+rectangle "符号主义时代\n(1956-1990s)" as Era1 #E74C3C {
+  card "知识表示" as K1 #FADBD8
+  card "规则推理" as K2 #FADBD8
+  card "专家系统" as K3 #FADBD8
+
+  K1 : 显式编码
+  K2 : IF-THEN 规则
+  K3 : 领域专家知识
+
+  note bottom of K3
+    优点: 可解释性强
+    缺点: 知识获取瓶颈
+  end note
+}
+
+rectangle "连接主义时代\n(1980s-2020)" as Era2 #F39C12 {
+  card "神经网络" as N1 #FEF5E7
+  card "深度学习" as N2 #FEF5E7
+  card "表示学习" as N3 #FEF5E7
+
+  N1 : 分布式表示
+  N2 : 端到端训练
+  N3 : 自动特征提取
+
+  note bottom of N3
+    优点: 泛化能力强
+    缺点: 黑盒不可解释
+  end note
+}
+
+rectangle "LLM Agent 时代\n(2022-现在)" as Era3 #2ECC71 {
+  card "预训练模型" as L1 #E8F8F5
+  card "上下文学习" as L2 #E8F8F5
+  card "工具使用" as L3 #E8F8F5
+  card "多智能体协作" as L4 #E8F8F5
+
+  L1 : 大规模语料预训练
+  L2 : Few-shot / Zero-shot
+  L3 : Function Calling / MCP
+  L4 : CrewAI / AutoGen
+
+  note bottom of L4
+    优点: 通用能力 + 可解释推理
+    挑战: 幻觉、可靠性
+  end note
+}
+
+Era1 -right-> Era2 : 知识瓶颈\n推动范式转变
+Era2 -right-> Era3 : 规模涌现\n能力突破
+
+legend right
+  |= 关键突破 |= 年份 |
+  | Transformer | 2017 |
+  | GPT-3 | 2020 |
+  | ChatGPT | 2022 |
+  | GPT-4 | 2023 |
+  | Claude 3.5 | 2024 |
+end legend
+
+@enduml

@@ -1,0 +1,79 @@
+@startuml
+title PATEOAS - 提示词驱动的应用状态
+
+skinparam backgroundColor #FEFEFE
+
+rectangle "传统模式：无状态交互" as Old #E74C3C {
+  card "用户" as U1 #FADBD8
+  card "提示词" as P1 #FADBD8
+  card "AI" as A1 #FADBD8
+  card "响应" as R1 #FADBD8
+
+  U1 -right-> P1
+  P1 -right-> A1
+  A1 -right-> R1
+
+  note bottom of Old
+    每次交互独立
+    状态无法延续
+    上下文丢失
+  end note
+}
+
+rectangle "PATEOAS：状态驱动交互" as New #2ECC71 {
+
+  rectangle "轮次 1" as T1 #E8F8F5 {
+    card "用户输入₀" as U2
+    card "提示词(状态₀)" as P2
+    card "AI 处理" as A2
+    card "响应 + 状态₁" as R2
+  }
+
+  rectangle "轮次 2" as T2 #E8F8F5 {
+    card "用户输入₁" as U3
+    card "提示词(状态₁)" as P3
+    card "AI 处理" as A3
+    card "响应 + 状态₂" as R3
+  }
+
+  rectangle "轮次 N" as TN #E8F8F5 {
+    card "用户输入ₙ₋₁" as UN
+    card "提示词(状态ₙ₋₁)" as PN
+    card "AI 处理" as AN
+    card "响应 + 状态ₙ" as RN
+  }
+
+  U2 -right-> P2
+  P2 -right-> A2
+  A2 -right-> R2
+  R2 -down-> P3 : 状态传递
+
+  U3 -right-> P3
+  P3 -right-> A3
+  A3 -right-> R3
+  R3 -down-> PN : 状态传递
+
+  UN -right-> PN
+  PN -right-> AN
+  AN -right-> RN
+
+  note bottom of New
+    状态在响应中流转
+    上下文持续传递
+    认知连续性保障
+  end note
+}
+
+Old -[hidden]down-> New
+
+legend right
+  |= 模式 |= 说明 |
+  | 嵌入式 | 状态直接在响应文本中 |
+  | 引用式 | 状态通过 ID 引用获取 |
+  | 混合式 | 关键状态嵌入+详情引用 |
+
+  **核心公式**
+  Prompt(Stateₙ) → Response + Stateₙ₊₁
+end legend
+
+@enduml

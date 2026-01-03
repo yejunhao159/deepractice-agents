@@ -1,0 +1,86 @@
+@startuml
+title 智能体应用生态全景图
+
+skinparam backgroundColor #FEFEFE
+skinparam rectangle {
+  RoundCorner 15
+}
+
+rectangle "开发者工具 (Human-in-the-Loop)" #E8F8F5 {
+  rectangle "GitHub Copilot" as Copilot #3498DB
+  rectangle "Claude Code" as ClaudeCode #9B59B6
+  rectangle "Cursor" as Cursor #2ECC71
+  rectangle "Trae" as Trae #E74C3C
+  rectangle "Windsurf" as Windsurf #F39C12
+
+  note bottom of Copilot
+    代码补全
+    内联建议
+  end note
+
+  note bottom of ClaudeCode
+    命令行智能体
+    自主执行任务
+  end note
+}
+
+rectangle "多智能体框架" #FEF9E7 {
+  rectangle "CrewAI" as CrewAI #E74C3C
+  rectangle "AutoGen" as AutoGen #3498DB
+  rectangle "MetaGPT" as MetaGPT #2ECC71
+  rectangle "LangGraph" as LangGraph #9B59B6
+  rectangle "CAMEL" as CAMEL #F39C12
+
+  note bottom of CrewAI
+    角色扮演
+    团队协作
+  end note
+
+  note bottom of LangGraph
+    图结构
+    状态管理
+  end note
+}
+
+rectangle "Deepractice 生态" #F4ECF7 {
+  rectangle "PromptX" as PromptX #8E44AD
+  rectangle "AgentX" as AgentX #2980B9
+  rectangle "Monogent" as Monogent #1ABC9C
+
+  note bottom of PromptX
+    角色创建
+    记忆管理
+  end note
+
+  note bottom of AgentX
+    事件驱动
+    运行时
+  end note
+}
+
+rectangle "基础设施" #EBF5FB {
+  rectangle "LLM APIs" as LLM #3498DB
+  rectangle "MCP Protocol" as MCP #2ECC71
+  rectangle "向量数据库" as VDB #E74C3C
+
+  LLM : OpenAI / Claude / DeepSeek
+  MCP : 工具标准协议
+  VDB : 记忆存储
+}
+
+' 连接关系
+Copilot -[hidden]-> ClaudeCode
+ClaudeCode -[hidden]-> Cursor
+
+CrewAI -[hidden]-> AutoGen
+AutoGen -[hidden]-> MetaGPT
+
+PromptX --> AgentX : 认知能力
+AgentX --> Monogent : 运行时
+
+CrewAI --> LLM
+AutoGen --> LLM
+PromptX --> MCP
+AgentX --> VDB
+
+@enduml

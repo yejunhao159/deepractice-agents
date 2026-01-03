@@ -1,0 +1,115 @@
+@startmindmap
+title 第1章：初识智能体 - 知识全景图
+<style>
+mindmapDiagram {
+  :depth(0) {
+    BackgroundColor #3498DB
+    FontColor white
+    FontSize 18
+    RoundCorner 15
+  }
+  :depth(1) {
+    BackgroundColor #2ECC71
+    FontColor white
+    FontSize 14
+  }
+  :depth(2) {
+    BackgroundColor #F39C12
+    FontColor white
+    FontSize 12
+  }
+  :depth(3) {
+    BackgroundColor #E74C3C
+    FontColor white
+    FontSize 11
+  }
+  :depth(4) {
+    BackgroundColor #9B59B6
+    FontColor white
+    FontSize 10
+  }
+}
+</style>
+
+* 初识智能体\nAgent Fundamentals
+
+** 1.1 什么是智能体
+*** 智能体定义
+**** 能感知环境的实体
+**** 能自主决策的系统
+**** 能执行行动的主体
+**** 能学习改进的个体
+*** 四个基本要素
+**** 环境 Environment
+***** 物理世界
+***** 数字空间
+***** 虚拟环境
+**** 传感器 Sensors
+***** 文本输入
+***** 视觉输入
+***** API 数据
+**** 执行器 Actuators
+***** 文本输出
+***** 工具调用
+***** 系统操作
+**** 自主性 Autonomy
+***** 独立决策
+***** 目标驱动
+***** 持续运行
+*** 分类体系
+**** 按架构分类
+***** 反射式 Reflex
+***** 基于模型 Model-based
+***** 基于目标 Goal-based
+***** 基于效用 Utility-based
+***** 学习型 Learning
+**** 按反应性分类
+***** 反应式 Reactive
+***** 规划式 Deliberative
+***** 混合式 Hybrid
+
+left side
+
+** 1.2 智能体如何工作
+*** PEAS 模型
+**** Performance 性能度量
+**** Environment 环境
+**** Actuators 执行器
+**** Sensors 传感器
+*** Agent Loop
+**** 感知 Perceive
+**** 思考 Think
+**** 行动 Act
+**** 观察 Observe
+*** TAO 协议
+**** Thought 思考
+**** Action 行动
+**** Observation 观察
+
+** 1.3 构建第一个智能体
+*** 环境准备
+**** Python 3.10+
+**** OpenAI API Key
+**** 开发环境配置
+*** 智能旅行助手
+**** 需求分析
+**** 工具定义
+**** 循环实现
+**** 测试验证
+
+** 1.4 智能体应用生态
+*** 开发者工具
+**** GitHub Copilot
+**** Claude Code
+**** Cursor
+**** Trae
+*** 多智能体框架
+**** CrewAI
+**** AutoGen
+**** MetaGPT
+**** LangGraph
+*** 范式对比
+**** Workflow 工作流
+**** Agent 智能体
+
+@endmindmap

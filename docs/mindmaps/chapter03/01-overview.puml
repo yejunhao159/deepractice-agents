@@ -1,0 +1,116 @@
+@startmindmap
+title 第3章：大语言模型与智能体 - 知识全景图
+<style>
+mindmapDiagram {
+  :depth(0) {
+    BackgroundColor #E74C3C
+    FontColor white
+    FontSize 18
+  }
+  :depth(1) {
+    BackgroundColor #3498DB
+    FontColor white
+    FontSize 14
+  }
+  :depth(2) {
+    BackgroundColor #27AE60
+    FontColor white
+    FontSize 12
+  }
+  :depth(3) {
+    BackgroundColor #F39C12
+    FontColor white
+    FontSize 11
+  }
+  :depth(4) {
+    BackgroundColor #9B59B6
+    FontColor white
+    FontSize 10
+  }
+}
+</style>
+
+* LLM与智能体\n核心引擎
+
+** 3.1 语言模型简史
+*** 统计语言模型
+**** N-gram 模型
+**** 马尔可夫链
+**** 词频统计
+*** 神经语言模型
+**** Word2Vec
+**** RNN/LSTM
+**** Seq2Seq
+*** Transformer 革命
+**** 注意力机制
+***** Self-Attention
+***** Multi-Head
+**** 并行计算
+**** 预训练范式
+*** 涌现能力
+**** 规模效应
+**** In-Context Learning
+**** 心智社会联想
+
+** 3.2 Prompt 工程基础
+*** Prompt 本质
+**** 传递认知框架
+**** 不只是传递信息
+**** 激活模型能力
+*** System Prompt 设计
+**** 角色设定
+**** 任务说明
+**** 输出格式
+**** 约束条件
+*** 语义鸿沟
+**** AI 不知道但角色必须知道
+**** 预训练知识边界
+**** 填补策略
+*** DPML 预告
+**** 声明式配置
+**** 结构化 Prompt
+
+left side
+
+** 3.3 LLM 能力与边界
+*** 推理能力分层
+**** 显式推理 (CoT)
+***** Chain of Thought
+***** 逐步分解
+**** 内部推理 (o1/o3)
+***** 思考时间扩展
+***** 隐式推理链
+*** RAG 不是记忆
+**** 检索 vs 联想
+**** 外部索引 vs 内部网络
+**** Engram 预告
+*** 能力边界
+**** 幻觉问题
+**** 时效性限制
+**** 复杂推理局限
+
+** 3.4 从LLM到智能体架构
+*** 模型选型 2025-2026
+**** 通用旗舰
+***** GPT-4.5/GPT-5
+***** Claude Opus 4.5
+**** 推理增强
+***** o1/o3 系列
+***** DeepSeek-R1
+**** 性价比
+***** DeepSeek-V3
+***** Claude Sonnet
+**** 快速响应
+***** GPT-4o-mini
+***** Claude Haiku
+*** 四层架构
+**** 规划层
+**** 推理层
+**** 记忆层
+**** 工具层
+*** 认知架构预告
+**** 功能视角
+**** 认知视角
+**** Monogent
+
+@endmindmap

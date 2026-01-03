@@ -1,0 +1,125 @@
+@startmindmap
+title 第6章：Deepractice 方法论 - 知识全景图
+<style>
+mindmapDiagram {
+  :depth(0) {
+    BackgroundColor #D35400
+    FontColor white
+    FontSize 18
+  }
+  :depth(1) {
+    BackgroundColor #2980B9
+    FontColor white
+    FontSize 14
+  }
+  :depth(2) {
+    BackgroundColor #27AE60
+    FontColor white
+    FontSize 12
+  }
+  :depth(3) {
+    BackgroundColor #8E44AD
+    FontColor white
+    FontSize 11
+  }
+}
+</style>
+
+* Deepractice 方法论\n从理论到实践
+
+** 6.1 从单智能体到多智能体
+*** 单智能体局限
+**** 能力边界有限
+**** 复杂任务瓶颈
+**** 专业深度不足
+*** 协作三大挑战
+**** 上下文丢失
+***** 对话间信息断层
+***** 状态无法传递
+**** 目标漂移
+***** 子任务偏离主目标
+***** 优先级混乱
+**** 状态不一致
+***** 多方信息不同步
+***** 决策冲突
+*** 两种协作范式
+**** 涌现式协作
+***** 自由对话
+***** 自组织涌现
+***** 灵活但不可控
+**** 显式控制
+***** 预定义流程
+***** 明确角色分工
+***** 可控但不灵活
+
+** 6.2 4P 理论
+*** L1 Prompt Pattern
+**** 通用提示词模式
+**** 可复用模板
+**** 最抽象层级
+*** L2 Domain Prompt
+**** 领域适配
+**** 专业知识注入
+**** 行业定制
+*** L3 Scenario Project
+**** 场景定制
+**** 工作流设计
+**** 多角色编排
+*** L4 Realization Product
+**** 产品实现
+**** 工程落地
+**** 最具体层级
+*** 转化公式
+**** Pattern + Domain = Domain Prompt
+**** Domain Prompt + Scenario = Project
+**** Project + Realization = Product
+
+left side
+
+** 6.3 AI 任务状态机
+*** 五元组模型
+**** q₀ 初始状态
+**** F 终止状态集
+**** Σ 输入符号集
+**** δ 转换函数
+**** Q 状态集
+*** 三大保障
+**** 原子性
+***** 完全执行或完全不执行
+**** 一致性
+***** 相同输入相同结果
+**** 可追溯性
+***** 完整状态历史
+
+** 6.4 PATEOAS
+*** 核心思想
+**** Prompt as the Engine of Application State
+**** 提示词驱动状态
+*** 与 HATEOAS 类比
+**** 超媒体 → 提示词
+**** 链接 → 状态转换
+*** 三种实现模式
+**** 嵌入式
+***** 状态直接在响应中
+**** 引用式
+***** 状态通过引用获取
+**** 混合式
+***** 关键状态嵌入+详情引用
+
+** 6.5 AI 组织化
+*** 三个层次
+**** 协作层
+**** 组织结构层
+**** 集体智能层
+*** 四大要素
+**** 角色分化
+**** 知识共享
+**** 流程规范
+**** 文化形成
+*** 演进阶段
+**** 工具 → 助手
+**** 助手 → 代理
+**** 代理 → 团队
+**** 团队 → 组织
+
+@endmindmap

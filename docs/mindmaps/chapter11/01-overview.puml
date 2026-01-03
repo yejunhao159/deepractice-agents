@@ -1,0 +1,55 @@
+@startmindmap
+title 第11章：工具使用 - 知识全景图
+<style>
+mindmapDiagram {
+  :depth(0) { BackgroundColor #16A085; FontColor white; FontSize 18 }
+  :depth(1) { BackgroundColor #8E44AD; FontColor white; FontSize 14 }
+  :depth(2) { BackgroundColor #F39C12; FontColor white; FontSize 12 }
+  :depth(3) { BackgroundColor #E74C3C; FontColor white; FontSize 11 }
+}
+</style>
+
+* 工具使用\n智能体的手与眼
+
+** Function Calling
+*** 基本概念
+**** 函数定义
+**** 参数描述
+**** 返回值
+*** OpenAI 风格
+**** JSON Schema
+**** 并行调用
+*** Claude Tool Use
+**** 工具定义
+**** 思考过程
+
+** MCP 协议
+*** Model Context Protocol
+*** MCP Server
+**** 服务定义
+**** 资源暴露
+*** MCP Client
+**** 服务发现
+**** 调用封装
+*** 生态系统
+
+left side
+
+** 工具链设计
+*** 工具分类
+**** 信息获取
+**** 动作执行
+**** 人机交互
+*** 工具组合
+**** 顺序执行
+**** 条件分支
+*** 安全考虑
+**** 权限控制
+**** 沙箱隔离
+
+** ToolX 集成
+*** 工具定义
+*** 参数验证
+*** 执行监控
+
+@endmindmap

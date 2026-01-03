@@ -1,0 +1,59 @@
+@startmindmap
+title 第7章：智能体经典范式 - 知识全景图
+<style>
+mindmapDiagram {
+  :depth(0) { BackgroundColor #1ABC9C; FontColor white; FontSize 18 }
+  :depth(1) { BackgroundColor #E74C3C; FontColor white; FontSize 14 }
+  :depth(2) { BackgroundColor #9B59B6; FontColor white; FontSize 12 }
+  :depth(3) { BackgroundColor #F39C12; FontColor white; FontSize 11 }
+}
+</style>
+
+* 智能体经典范式\n手写实现理解原理
+
+** 7.1 环境准备
+*** Python 环境
+*** LLM 客户端封装
+*** 工具执行器
+
+** 7.2 ReAct 范式
+*** 核心思想
+**** Reasoning + Acting
+**** 思考-行动交织
+*** 循环结构
+**** Thought 思考
+**** Action 行动
+**** Observation 观察
+*** 优缺点
+**** 可解释性强
+**** 效率较低
+
+left side
+
+** 7.3 Plan-and-Solve
+*** 核心思想
+**** 先规划后执行
+**** 分治策略
+*** 两阶段
+**** Plan 生成计划
+**** Solve 逐步执行
+*** 优缺点
+**** 复杂任务友好
+**** 规划成本高
+
+** 7.4 Reflection
+*** 核心思想
+**** 自我反思
+**** 持续改进
+*** 循环
+**** 执行→评估→修正
+*** 优缺点
+**** 质量高
+**** 调用多
+
+** 7.5 范式对照
+*** 手写 vs 框架
+*** AgentX 对应
+*** PromptX 集成
+
+@endmindmap

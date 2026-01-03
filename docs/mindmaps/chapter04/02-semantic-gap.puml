@@ -1,0 +1,80 @@
+@startuml
+title 语义鸿沟识别与填补
+
+skinparam backgroundColor #FEFEFE
+skinparam activity {
+  BackgroundColor #3498DB
+  FontColor white
+}
+
+|#E8F8F5|识别阶段|
+start
+:遇到一条信息;
+
+:Google 测试;
+if (能搜到相关内容?) then (是)
+  :通用知识\n非鸿沟;
+  note right: React 组件概念\nHTTP 协议
+else (否)
+  :可能是鸿沟\n继续测试;
+endif
+
+:ChatGPT 测试;
+if (AI 已经知道?) then (是)
+  :预训练知识\n非鸿沟;
+  note right: Python 语法\n设计模式
+else (否)
+  :AI 盲区\n继续测试;
+endif
+
+:上下文测试;
+if (离开场景还有意义?) then (是)
+  :通用概念\n非鸿沟;
+else (否)
+  :场景特有\n继续测试;
+endif
+
+:特异性测试;
+if (是通用还是私有?) then (通用)
+  :公共知识\n非鸿沟;
+else (私有)
+  #E74C3C:确认为语义鸿沟!;
+  note right
+    **语义鸿沟示例**
+    - 公司组件规范
+    - 团队代码风格
+    - 项目 API 约定
+    - 内部架构决策
+  end note
+endif
+
+|#FEF9E7|填补阶段|
+
+:选择填补策略;
+
+split
+  :显式注入;
+  note right
+    直接写入 Prompt
+    适合少量关键信息
+  end note
+split again
+  :动态加载;
+  note right
+    RAG / 知识库
+    适合大量文档
+  end note
+split again
+  :记忆召回;
+  note right
+    Engram recall
+    适合经验知识
+  end note
+end split
+
+:语义鸿沟被填补;
+:AI 获得完整认知;
+
+stop
+
+@enduml

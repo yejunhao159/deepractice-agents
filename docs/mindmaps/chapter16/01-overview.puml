@@ -1,0 +1,61 @@
+@startmindmap
+title 第16章：总结与展望 - 知识全景图
+<style>
+mindmapDiagram {
+  :depth(0) { BackgroundColor #2C3E50; FontColor white; FontSize 18 }
+  :depth(1) { BackgroundColor #E74C3C; FontColor white; FontSize 14 }
+  :depth(2) { BackgroundColor #3498DB; FontColor white; FontSize 12 }
+  :depth(3) { BackgroundColor #2ECC71; FontColor white; FontSize 11 }
+}
+</style>
+
+* 总结与展望\n回顾与前瞻
+
+** 核心回顾
+*** 基础篇 (1-3)
+**** 智能体概念
+**** 发展历史
+**** LLM 基础
+*** Deepractice 生态 (4-6)
+**** PromptX
+**** AgentX
+**** 方法论
+*** 范式与实践 (7-9)
+**** 经典范式
+**** 框架对比
+**** Monogent
+*** 高级主题 (10-12)
+**** 上下文工程
+**** 工具使用
+**** 多智能体协作
+*** 实战项目 (13-15)
+**** 代码助手
+**** 知识问答
+**** 自动化工作流
+
+left side
+
+** 技术趋势
+*** 模型演进
+**** 推理增强
+**** 多模态融合
+**** 长上下文
+*** 架构演进
+**** 认知架构
+**** 具身智能
+**** 世界模型
+*** 应用趋势
+**** 垂直深耕
+**** 企业落地
+**** 人机协作
+
+** 学习路径
+*** 入门 (1-3章)
+*** 进阶 (4-7章)
+*** 专家 (8-16章)
+
+** Deepractice 愿景
+*** AI 社会
+*** 人机共生
+
+@endmindmap

@@ -1,0 +1,71 @@
+@startuml
+title Transformer 架构详解
+
+skinparam backgroundColor #FEFEFE
+skinparam component {
+  BackgroundColor #3498DB
+  FontColor white
+}
+
+package "Transformer" #ECF0F1 {
+
+  package "编码器 Encoder (x N)" #E8F8F5 {
+    component [Input\nEmbedding] as IE
+    component [Positional\nEncoding] as PE
+    component [Multi-Head\nSelf-Attention] as MHSA
+    component [Add & Norm] as AN1
+    component [Feed Forward\nNetwork] as FFN
+    component [Add & Norm] as AN2
+
+    IE -down-> PE
+    PE -down-> MHSA
+    MHSA -down-> AN1
+    PE -down-> AN1 : 残差连接
+    AN1 -down-> FFN
+    FFN -down-> AN2
+    AN1 -down-> AN2 : 残差连接
+  }
+
+  package "解码器 Decoder (x N)" #FEF9E7 {
+    component [Output\nEmbedding] as OE
+    component [Positional\nEncoding] as PE2
+    component [Masked Multi-Head\nSelf-Attention] as MMHSA
+    component [Add & Norm] as AN3
+    component [Multi-Head\nCross-Attention] as MHCA
+    component [Add & Norm] as AN4
+    component [Feed Forward\nNetwork] as FFN2
+    component [Add & Norm] as AN5
+    component [Linear] as L
+    component [Softmax] as SM
+
+    OE -down-> PE2
+    PE2 -down-> MMHSA
+    MMHSA -down-> AN3
+    AN3 -down-> MHCA
+    AN2 -right-> MHCA : Encoder 输出
+    MHCA -down-> AN4
+    AN4 -down-> FFN2
+    FFN2 -down-> AN5
+    AN5 -down-> L
+    L -down-> SM
+  }
+}
+
+note right of MHSA
+  自注意力机制
+  Q, K, V 来自同一输入
+  Attention(Q,K,V) = softmax(QK^T/√d)V
+end note
+
+note right of MHCA
+  交叉注意力
+  Q 来自解码器
+  K, V 来自编码器
+end note
+
+note bottom of SM
+  输出概率分布
+  选择下一个 Token
+end note
+
+@enduml

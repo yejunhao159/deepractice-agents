@@ -1,0 +1,76 @@
+@startuml
+title Nuwa 角色创建流程 - ISSUE 范式
+
+skinparam backgroundColor #FEFEFE
+skinparam sequence {
+  ParticipantBackgroundColor #3498DB
+  ParticipantFontColor white
+  ActorBackgroundColor #E74C3C
+  ActorFontColor white
+}
+
+actor "用户" as User
+participant "Nuwa\n女娲" as Nuwa #9B59B6
+participant "角色配置\nRole Config" as Role #2ECC71
+database "PromptX\n资源库" as PX #F39C12
+
+== Issue 问题探索 ==
+User -> Nuwa: 激活 Nuwa
+activate Nuwa
+Nuwa -> User: 你想解决什么问题？\n（不是"你想要什么角色"）
+
+User -> Nuwa: 我需要帮我审查代码
+Nuwa -> Nuwa: 深入探索
+Nuwa -> User: 审查什么类型的代码？\n关注安全?性能?风格?
+
+User -> Nuwa: 主要是 TypeScript\n关注代码质量和最佳实践
+
+== Solution 方案设计 ==
+Nuwa -> Nuwa: 分析需求\n设计角色
+note right of Nuwa
+  思维层: 代码审查专家思维
+  执行层: 审查流程和工具
+  知识层: TS 最佳实践
+end note
+
+Nuwa -> Role: 生成角色配置
+activate Role
+
+Role -> Role: 构建四维度
+note right of Role
+  **identity**: TypeScript 代码审查专家
+  **expertise**: 代码质量、设计模式、性能优化
+  **principles**: 建设性反馈、问题优先级、可操作建议
+  **personality**: 严谨但友好
+end note
+
+== Scenario 场景验证 ==
+Role -> Nuwa: 配置完成
+Nuwa -> User: 这是初版角色，\n让我们验证一下
+
+User -> Nuwa: [提供代码片段测试]
+Nuwa -> Nuwa: 以新角色身份\n执行代码审查
+Nuwa -> User: [审查结果]
+
+User -> Nuwa: 需要更关注安全问题
+Nuwa -> Role: 调整 expertise\n增加安全审查权重
+
+== Unique 独特价值 ==
+Role -> Role: 添加差异化能力
+note right of Role
+  - 团队特有规范识别
+  - 历史问题模式学习
+  - 上下文感知审查
+end note
+
+== Evaluate 持续评估 ==
+Role -> PX: 保存角色
+deactivate Role
+
+Nuwa -> User: 角色创建完成！\n使用 action 激活
+deactivate Nuwa
+
+User -> PX: action("ts-reviewer")
+PX -> User: 角色已激活\n开始工作
+
+@enduml

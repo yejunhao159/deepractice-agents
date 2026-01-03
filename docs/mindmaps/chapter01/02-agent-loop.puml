@@ -1,0 +1,73 @@
+@startuml
+title Agent Loop - 智能体核心循环
+
+skinparam backgroundColor #FEFEFE
+skinparam participant {
+  BackgroundColor #3498DB
+  FontColor white
+  BorderColor #2980B9
+}
+skinparam note {
+  BackgroundColor #FFF9C4
+  BorderColor #F39C12
+}
+
+actor "用户" as User #E74C3C
+participant "智能体\nAgent" as Agent #3498DB
+participant "大脑\nLLM" as LLM #9B59B6
+participant "工具\nTools" as Tools #2ECC71
+database "记忆\nMemory" as Memory #F39C12
+entity "环境\nEnvironment" as Env #1ABC9C
+
+== 初始化阶段 ==
+User -> Agent: 发送任务/问题
+activate Agent
+Agent -> Memory: 加载上下文
+Memory --> Agent: 历史记忆
+
+== 感知阶段 Perceive ==
+Agent -> Agent: 解析用户输入
+note right: 提取意图\n识别关键信息
+
+== 思考阶段 Think ==
+Agent -> LLM: 构建 Prompt
+activate LLM
+note right
+  System Prompt +
+  用户输入 +
+  记忆上下文 +
+  可用工具列表
+end note
+LLM --> Agent: 思考结果 (Thought)
+deactivate LLM
+
+alt 需要使用工具
+  == 行动阶段 Act ==
+  Agent -> Tools: 调用工具 (Action)
+  activate Tools
+  Tools -> Env: 执行操作
+  Env --> Tools: 返回结果
+  Tools --> Agent: 工具输出 (Observation)
+  deactivate Tools
+
+  Agent -> Memory: 保存中间结果
+  Agent -> LLM: 继续思考
+  note right: 基于观察结果\n决定下一步
+  LLM --> Agent: 下一步决策
+else 直接回复
+  Agent -> Agent: 生成最终回复
+end
+
+== 响应阶段 ==
+Agent -> Memory: 保存对话记录
+Agent --> User: 返回结果
+deactivate Agent
+
+note over Agent
+  循环继续直到:
+  1. 任务完成
+  2. 达到最大轮次
+  3. 用户中断
+end note
+
+@enduml

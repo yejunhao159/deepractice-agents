@@ -1,0 +1,53 @@
+@startmindmap
+title 第10章：上下文工程 - 知识全景图
+<style>
+mindmapDiagram {
+  :depth(0) { BackgroundColor #2C3E50; FontColor white; FontSize 18 }
+  :depth(1) { BackgroundColor #E74C3C; FontColor white; FontSize 14 }
+  :depth(2) { BackgroundColor #3498DB; FontColor white; FontSize 12 }
+  :depth(3) { BackgroundColor #27AE60; FontColor white; FontSize 11 }
+}
+</style>
+
+* 上下文工程\n记忆与注意力管理
+
+** 上下文窗口优化
+*** 窗口限制
+**** 4K/8K/128K/1M
+**** 有效利用率
+*** 优化策略
+**** 信息压缩
+**** 优先级排序
+**** 滑动窗口
+*** 成本控制
+**** Token 计费
+**** 批量处理
+
+** 长文本处理
+*** 分块策略
+**** 固定长度
+**** 语义分块
+**** 重叠分块
+*** 汇总策略
+**** 递归汇总
+**** Map-Reduce
+
+left side
+
+** 记忆与检索
+*** 短期记忆
+**** 对话历史
+**** 工作记忆
+*** 长期记忆
+**** 知识库
+**** 经验库
+*** RAG 集成
+**** 向量检索
+**** 混合检索
+
+** Engram 进阶
+*** 语义网络
+*** 联想检索
+*** 记忆整合
+
+@endmindmap

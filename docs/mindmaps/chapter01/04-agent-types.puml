@@ -1,0 +1,79 @@
+@startuml
+title 智能体类型演进图
+
+skinparam backgroundColor #FEFEFE
+skinparam state {
+  BackgroundColor #3498DB
+  FontColor white
+  BorderColor #2980B9
+}
+
+state "反射式智能体\nSimple Reflex Agent" as S1 #E74C3C {
+  state "感知" as S1_P
+  state "条件规则" as S1_R
+  state "行动" as S1_A
+  S1_P --> S1_R : 模式匹配
+  S1_R --> S1_A : if-then
+}
+
+state "基于模型的智能体\nModel-based Agent" as S2 #F39C12 {
+  state "感知" as S2_P
+  state "世界模型" as S2_M
+  state "规则" as S2_R
+  state "行动" as S2_A
+  S2_P --> S2_M : 更新
+  S2_M --> S2_R : 推理
+  S2_R --> S2_A
+}
+
+state "基于目标的智能体\nGoal-based Agent" as S3 #2ECC71 {
+  state "感知" as S3_P
+  state "模型" as S3_M
+  state "目标" as S3_G
+  state "搜索/规划" as S3_S
+  state "行动" as S3_A
+  S3_P --> S3_M
+  S3_M --> S3_G : 差距分析
+  S3_G --> S3_S : 路径规划
+  S3_S --> S3_A
+}
+
+state "基于效用的智能体\nUtility-based Agent" as S4 #9B59B6 {
+  state "感知" as S4_P
+  state "模型" as S4_M
+  state "效用函数" as S4_U
+  state "最优选择" as S4_O
+  state "行动" as S4_A
+  S4_P --> S4_M
+  S4_M --> S4_U : 评估
+  S4_U --> S4_O : 最大化
+  S4_O --> S4_A
+}
+
+state "学习型智能体\nLearning Agent" as S5 #3498DB {
+  state "感知" as S5_P
+  state "学习元素" as S5_L
+  state "性能元素" as S5_E
+  state "批评者" as S5_C
+  state "问题生成器" as S5_G
+  state "行动" as S5_A
+  S5_P --> S5_E
+  S5_E --> S5_A
+  S5_A --> S5_C : 反馈
+  S5_C --> S5_L : 改进
+  S5_L --> S5_E : 更新
+  S5_L --> S5_G : 探索
+}
+
+S1 -[hidden]-> S2
+S2 -[hidden]-> S3
+S3 -[hidden]-> S4
+S4 -[hidden]-> S5
+
+note right of S1 : 最简单\n无内部状态
+note right of S2 : 有内部状态\n跟踪世界变化
+note right of S3 : 目标导向\n支持规划
+note right of S4 : 权衡取舍\n最优决策
+note right of S5 : 持续改进\nLLM Agent 所属
+
+@enduml

@@ -1,0 +1,78 @@
+@startuml
+title Minsky 心智社会理论 - 多智能体思想起源
+
+skinparam backgroundColor #FEFEFE
+skinparam component {
+  BackgroundColor<<agent>> #3498DB
+  FontColor<<agent>> white
+  BackgroundColor<<meta>> #E74C3C
+  FontColor<<meta>> white
+}
+
+package "心智 Mind" #ECF0F1 {
+
+  component [K-lines\n知识线索] <<meta>> as KL
+  component [记忆\nMemory] <<meta>> as Mem
+
+  package "高层代理 High-level Agents" #FEF9E7 {
+    component [规划者\nPlanner] <<agent>> as P
+    component [评估者\nCritic] <<agent>> as C
+    component [协调者\nCoordinator] <<agent>> as Co
+  }
+
+  package "中层代理 Mid-level Agents" #E8F8F5 {
+    component [视觉处理\nVision] <<agent>> as V
+    component [语言处理\nLanguage] <<agent>> as L
+    component [运动控制\nMotor] <<agent>> as M
+    component [情感处理\nEmotion] <<agent>> as E
+  }
+
+  package "底层代理 Low-level Agents" #F4ECF7 {
+    component [边缘检测] <<agent>> as E1
+    component [颜色识别] <<agent>> as E2
+    component [词法分析] <<agent>> as E3
+    component [语法解析] <<agent>> as E4
+    component [肌肉控制] <<agent>> as E5
+    component [平衡感知] <<agent>> as E6
+  }
+
+  ' 连接关系
+  P --> Co
+  C --> Co
+  Co --> V
+  Co --> L
+  Co --> M
+  Co --> E
+
+  V --> E1
+  V --> E2
+  L --> E3
+  L --> E4
+  M --> E5
+  M --> E6
+
+  KL --> P
+  KL --> C
+  Mem --> V
+  Mem --> L
+}
+
+note right of P
+  单个代理都很"愚蠢"
+  但协作产生智能
+end note
+
+note bottom of E1
+  无智能的简单处理单元
+  通过协作实现复杂功能
+end note
+
+legend right
+  |= 概念 |= 现代对应 |
+  | Agent | LLM 智能体 |
+  | K-lines | RAG 检索 |
+  | 协调者 | Orchestrator |
+  | 层级结构 | 多智能体系统 |
+end legend
+
+@enduml

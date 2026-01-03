@@ -1,0 +1,118 @@
+@startmindmap
+title 第5章：AgentX 框架 - 知识全景图
+<style>
+mindmapDiagram {
+  :depth(0) {
+    BackgroundColor #16A085
+    FontColor white
+    FontSize 18
+  }
+  :depth(1) {
+    BackgroundColor #8E44AD
+    FontColor white
+    FontSize 14
+  }
+  :depth(2) {
+    BackgroundColor #F39C12
+    FontColor white
+    FontSize 12
+  }
+  :depth(3) {
+    BackgroundColor #3498DB
+    FontColor white
+    FontSize 11
+  }
+  :depth(4) {
+    BackgroundColor #E74C3C
+    FontColor white
+    FontSize 10
+  }
+}
+</style>
+
+* AgentX\n事件驱动智能体框架
+
+** 5.1 设计哲学
+*** 事件驱动架构
+**** 异步非阻塞
+**** 实时流式
+**** 可观测性优先
+*** Mealy Machine
+**** (state, input) → (state, outputs)
+**** 输出依赖状态+输入
+**** 确定性状态转换
+*** Docker 式设计
+**** Create 创建
+**** Start 启动
+**** Pause 暂停
+**** Resume 恢复
+**** Stop 停止
+*** TypeScript 原生
+**** 类型安全
+**** 现代语法
+**** 生态兼容
+
+** 5.2 快速开始
+*** 安装方式
+**** NPX 快速启动
+**** Docker 部署
+**** NPM 包安装
+*** Portagent 体验
+**** 开箱即用门户
+**** Web UI 界面
+**** API 接口
+
+left side
+
+** 5.3 核心概念
+*** AgentEngine
+**** 核心引擎
+**** 状态管理
+**** 消息处理
+*** SystemBus
+**** 中央事件总线
+**** 事件广播
+**** 订阅机制
+*** Driver/Presenter
+**** Driver 输入适配
+***** CLI Driver
+***** HTTP Driver
+***** WebSocket Driver
+**** Presenter 输出渲染
+***** Text Presenter
+***** JSON Presenter
+***** Stream Presenter
+
+** 5.4 运行时系统
+*** 四层事件模型
+**** Stream Events
+***** text_delta
+***** tool_delta
+**** State Events
+***** thinking_start
+***** thinking_end
+**** Message Events
+***** user_message
+***** assistant_message
+**** Turn Events
+***** turn_complete
+***** usage_stats
+*** Container
+**** 生命周期管理
+**** 资源隔离
+*** Persistence
+**** SQLite
+**** Memory
+
+** 5.5 与 PromptX 集成
+*** 角色激活
+**** action 调用
+**** 角色加载
+*** 记忆管理
+**** Engram 接入
+**** recall/remember
+*** MCP 工具
+**** 协议支持
+**** 工具注册
+
+@endmindmap

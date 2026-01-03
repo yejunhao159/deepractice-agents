@@ -1,0 +1,81 @@
+@startuml
+title 2025-2026 模型选型决策树
+
+skinparam backgroundColor #FEFEFE
+skinparam activity {
+  BackgroundColor #3498DB
+  FontColor white
+  BorderColor #2980B9
+  DiamondBackgroundColor #F39C12
+  DiamondFontColor white
+}
+
+start
+
+:接收任务;
+
+if (任务复杂度?) then (高)
+  if (需要深度推理?) then (是)
+    :推理增强模型;
+    note right
+      **o1 / o3 系列**
+      **DeepSeek-R1**
+      - 数学证明
+      - 代码调试
+      - 复杂逻辑
+    end note
+    :适用场景:\n- 数学竞赛\n- 科学研究\n- 复杂规划;
+  else (否)
+    :通用旗舰模型;
+    note right
+      **GPT-4.5 / GPT-5**
+      **Claude Opus 4.5**
+      - 最强综合能力
+      - 多模态支持
+    end note
+    :适用场景:\n- 创意写作\n- 复杂对话\n- 多模态任务;
+  endif
+else (中/低)
+  if (预算敏感?) then (是)
+    :性价比模型;
+    note right
+      **DeepSeek-V3**
+      **Claude Sonnet**
+      **GPT-4o**
+      - 能力/成本平衡
+    end note
+    :适用场景:\n- 日常编码\n- 内容生成\n- 知识问答;
+  else (否)
+    if (需要低延迟?) then (是)
+      :快速响应模型;
+      note right
+        **GPT-4o-mini**
+        **Claude Haiku**
+        - 毫秒级响应
+        - 高并发支持
+      end note
+      :适用场景:\n- 实时聊天\n- 批量处理\n- 简单分类;
+    else (否)
+      :性价比模型;
+    endif
+  endif
+endif
+
+:执行任务;
+
+if (结果满意?) then (是)
+  :完成;
+  stop
+else (否)
+  :升级模型或调整策略;
+  note right
+    尝试:
+    1. 升级到更强模型
+    2. 添加 CoT 提示
+    3. 使用工具增强
+  end note
+endif
+
+stop
+
+@enduml

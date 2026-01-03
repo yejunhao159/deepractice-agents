@@ -1,0 +1,45 @@
+@startuml
+title ReAct 范式执行流程
+
+skinparam backgroundColor #FEFEFE
+skinparam activity {
+  BackgroundColor #3498DB
+  FontColor white
+}
+
+start
+:接收用户任务;
+
+repeat
+  :Thought\n思考当前状态和下一步;
+  note right
+    分析任务进展
+    决定是否需要工具
+    规划下一步行动
+  end note
+
+  if (需要使用工具?) then (是)
+    :Action\n选择并调用工具;
+    note right
+      Action: search[query]
+      Action: calculate[expression]
+      Action: read_file[path]
+    end note
+
+    :Observation\n获取工具返回结果;
+    note right
+      工具执行结果
+      外部信息获取
+      环境反馈
+    end note
+  else (否)
+    :Final Answer\n生成最终回答;
+    stop
+  endif
+
+repeat while (任务未完成?) is (是)
+
+:返回结果;
+stop
+
+@enduml

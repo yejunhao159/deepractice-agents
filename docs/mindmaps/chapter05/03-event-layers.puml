@@ -1,0 +1,79 @@
+@startuml
+title AgentX 四层事件模型
+
+skinparam backgroundColor #FEFEFE
+skinparam package {
+  BackgroundColor #ECF0F1
+}
+
+package "事件层级 Event Layers" {
+
+  rectangle "Turn Events\n轮次事件" as Turn #E74C3C {
+    card "turn_start" as TS #FADBD8
+    card "turn_complete" as TC #FADBD8
+    card "usage_stats" as US #FADBD8
+  }
+  note right of Turn
+    粗粒度统计
+    - 完整轮次追踪
+    - Token 使用统计
+    - 性能指标
+  end note
+
+  rectangle "Message Events\n消息事件" as Message #F39C12 {
+    card "user_message" as UM #FEF5E7
+    card "assistant_message" as AM #FEF5E7
+    card "system_message" as SM #FEF5E7
+  }
+  note right of Message
+    完整消息
+    - 用户输入
+    - 助手回复
+    - 系统通知
+  end note
+
+  rectangle "State Events\n状态事件" as State #3498DB {
+    card "thinking_start" as ThS #EBF5FB
+    card "thinking_end" as ThE #EBF5FB
+    card "tool_start" as TlS #EBF5FB
+    card "tool_end" as TlE #EBF5FB
+  }
+  note right of State
+    状态变化
+    - 思考开始/结束
+    - 工具调用开始/结束
+    - 会话状态转换
+  end note
+
+  rectangle "Stream Events\n流事件" as Stream #2ECC71 {
+    card "text_delta" as TD #E8F8F5
+    card "tool_delta" as TlD #E8F8F5
+    card "thinking_delta" as ThD #E8F8F5
+  }
+  note right of Stream
+    细粒度增量
+    - 实时文本流
+    - 工具调用增量
+    - 思考过程增量
+  end note
+}
+
+' 层级关系
+Turn -[hidden]down-> Message
+Message -[hidden]down-> State
+State -[hidden]down-> Stream
+
+' 聚合关系
+Stream ..> State : 聚合
+State ..> Message : 聚合
+Message ..> Turn : 聚合
+
+legend bottom
+  |= 层级 |= 粒度 |= 用途 |
+  | Turn | 粗 | 统计分析、计费 |
+  | Message | 中 | 对话历史、持久化 |
+  | State | 细 | UI 状态、进度显示 |
+  | Stream | 极细 | 实时渲染、流式输出 |
+end legend
+
+@enduml

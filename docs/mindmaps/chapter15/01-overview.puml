@@ -1,0 +1,54 @@
+@startmindmap
+title 第15章：自动化工作流 - 知识全景图
+<style>
+mindmapDiagram {
+  :depth(0) { BackgroundColor #F39C12; FontColor white; FontSize 18 }
+  :depth(1) { BackgroundColor #8E44AD; FontColor white; FontSize 14 }
+  :depth(2) { BackgroundColor #1ABC9C; FontColor white; FontSize 12 }
+  :depth(3) { BackgroundColor #E74C3C; FontColor white; FontSize 11 }
+}
+</style>
+
+* 自动化工作流\n智能业务流程引擎
+
+** 流程编排
+*** 流程建模
+**** 顺序流程
+**** 分支流程
+**** 并行流程
+*** 节点类型
+**** 智能体节点
+**** 工具节点
+**** 人工节点
+*** 流程定义
+**** YAML 配置
+**** 可视化设计
+
+** 任务调度
+*** 触发机制
+**** 定时触发
+**** 事件触发
+*** 调度策略
+**** 优先级队列
+**** 负载均衡
+
+left side
+
+** 异常处理
+*** 异常类型
+**** 智能体异常
+**** 工具异常
+**** 超时异常
+*** 处理策略
+**** 重试机制
+**** 降级方案
+**** 人工介入
+
+** 完整实现
+*** 流程引擎
+*** AgentX 集成
+*** 实战案例
+**** 数据处理流水线
+**** 内容审核流程
+
+@endmindmap

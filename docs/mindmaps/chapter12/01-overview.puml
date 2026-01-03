@@ -1,0 +1,55 @@
+@startmindmap
+title 第12章：多智能体协作 - 知识全景图
+<style>
+mindmapDiagram {
+  :depth(0) { BackgroundColor #E74C3C; FontColor white; FontSize 18 }
+  :depth(1) { BackgroundColor #3498DB; FontColor white; FontSize 14 }
+  :depth(2) { BackgroundColor #2ECC71; FontColor white; FontSize 12 }
+  :depth(3) { BackgroundColor #9B59B6; FontColor white; FontSize 11 }
+}
+</style>
+
+* 多智能体协作\n团队协同
+
+** 协作模式
+*** 层级模式
+**** 主从结构
+**** 任务分发
+*** 对等模式
+**** 平等协商
+**** 共识机制
+*** 混合模式
+**** 动态角色
+**** 自组织
+*** 专家模式
+**** 技能互补
+**** 知识共享
+
+** 通信协议
+*** 消息格式
+**** 结构化消息
+**** 语义标注
+*** 通信拓扑
+**** 广播
+**** 点对点
+**** 发布订阅
+
+left side
+
+** 冲突解决
+*** 冲突类型
+**** 资源冲突
+**** 目标冲突
+**** 决策冲突
+*** 解决策略
+**** 优先级规则
+**** 仲裁机制
+**** 协商谈判
+
+** 实战模式
+*** 辩论模式
+*** 流水线模式
+*** 群聊模式
+*** 委员会模式
+
+@endmindmap

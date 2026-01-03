@@ -1,0 +1,80 @@
+@startuml
+title Engram 记忆网络 - 语义激活扩散
+
+skinparam backgroundColor #FEFEFE
+
+' 定义节点样式
+skinparam card {
+  BackgroundColor #3498DB
+  FontColor white
+  BorderColor #2980B9
+}
+
+' 记忆网络图
+rectangle "Engram 语义网络" #ECF0F1 {
+
+  ' 核心概念节点
+  card "TypeScript" as TS #E74C3C
+  card "类型系统" as Type #E74C3C
+  card "接口" as Interface #F39C12
+  card "泛型" as Generic #F39C12
+  card "装饰器" as Decorator #F39C12
+
+  card "React" as React #2ECC71
+  card "组件" as Component #2ECC71
+  card "Hooks" as Hooks #27AE60
+  card "状态管理" as State #27AE60
+
+  card "项目规范" as Spec #9B59B6
+  card "命名约定" as Naming #9B59B6
+  card "文件结构" as FileStruct #9B59B6
+
+  card "性能优化" as Perf #3498DB
+  card "Memo" as Memo #3498DB
+  card "虚拟化" as Virtual #3498DB
+
+  ' 连接关系
+  TS -- Type : has
+  Type -- Interface : includes
+  Type -- Generic : includes
+  TS -- Decorator : feature
+
+  React -- Component : core
+  Component -- Hooks : uses
+  Hooks -- State : manages
+
+  TS -- React : used_with
+  Component -- Type : typed_by
+  Interface -- Component : defines
+
+  Spec -- Naming : includes
+  Spec -- FileStruct : includes
+  Naming -- Component : applies_to
+
+  Perf -- Memo : technique
+  Perf -- Virtual : technique
+  Component -- Perf : optimized_by
+}
+
+' 激活扩散示意
+note bottom of TS
+  **激活扩散过程**
+
+  1. 查询: "TypeScript 组件优化"
+  2. 激活: TypeScript (1.0)
+  3. 扩散: Type(0.8), React(0.7)
+  4. 扩散: Component(0.6), Perf(0.5)
+  5. 扩散: Memo(0.4), Hooks(0.3)
+  6. 召回: 相关记忆片段
+end note
+
+legend right
+  |= 强度 |= 含义 |
+  | 1.0 | 直接激活 |
+  | 0.7-0.9 | 强关联 |
+  | 0.4-0.6 | 中关联 |
+  | 0.1-0.3 | 弱关联 |
+  | 0.0 | 未激活 |
+end legend
+
+@enduml

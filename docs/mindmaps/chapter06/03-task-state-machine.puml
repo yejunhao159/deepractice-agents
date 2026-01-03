@@ -1,0 +1,68 @@
+@startuml
+title AI 任务状态机 - 五元组模型
+
+skinparam backgroundColor #FEFEFE
+skinparam state {
+  BackgroundColor #3498DB
+  FontColor white
+}
+
+' 状态定义
+state "初始状态 q₀\n任务接收" as Q0 #2ECC71
+state "分析状态\n需求理解" as Q1 #3498DB
+state "规划状态\n任务分解" as Q2 #3498DB
+state "执行状态\n任务执行" as Q3 #F39C12
+state "验证状态\n结果检查" as Q4 #3498DB
+state "成功终态 F₁\n任务完成" as F1 #27AE60
+state "失败终态 F₂\n任务失败" as F2 #E74C3C
+state "取消终态 F₃\n用户取消" as F3 #9B59B6
+
+' 转换函数 δ
+Q0 --> Q1 : σ₁: 接收任务\n/ 记录开始时间
+Q1 --> Q2 : σ₂: 分析完成\n/ 生成理解报告
+Q2 --> Q3 : σ₃: 规划完成\n/ 生成任务列表
+Q3 --> Q4 : σ₄: 执行完成\n/ 收集执行结果
+Q4 --> F1 : σ₅: 验证通过\n/ 生成完成报告
+
+' 异常路径
+Q1 --> F2 : σ_err: 无法理解\n/ 记录错误原因
+Q2 --> F2 : σ_err: 无法规划\n/ 记录错误原因
+Q3 --> F2 : σ_err: 执行失败\n/ 记录错误详情
+Q4 --> Q3 : σ_retry: 验证失败\n/ 重新执行
+
+' 用户干预
+Q1 --> F3 : σ_cancel: 用户取消
+Q2 --> F3 : σ_cancel: 用户取消
+Q3 --> F3 : σ_cancel: 用户取消
+Q4 --> F3 : σ_cancel: 用户取消
+
+' 图例
+note right of Q0
+  **五元组定义**
+  M = (Q, Σ, δ, q₀, F)
+
+  **Q 状态集**
+  {q₀, Q1, Q2, Q3, Q4, F1, F2, F3}
+
+  **Σ 输入符号集**
+  {σ₁...σ₅, σ_err, σ_cancel, σ_retry}
+
+  **δ 转换函数**
+  δ: Q × Σ → Q
+
+  **q₀ 初始状态**
+  任务接收状态
+
+  **F 终止状态集**
+  {F1, F2, F3}
+end note
+
+note bottom of Q3
+  **三大保障**
+
+  **原子性**: 状态转换要么完成，要么回滚
+  **一致性**: 相同输入产生相同状态序列
+  **可追溯性**: 完整记录状态转换历史
+end note
+
+@enduml

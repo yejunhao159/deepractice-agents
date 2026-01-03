@@ -1,0 +1,65 @@
+@startuml
+title AgentX Mealy Machine 状态转换
+
+skinparam backgroundColor #FEFEFE
+skinparam state {
+  BackgroundColor #3498DB
+  FontColor white
+  BorderColor #2980B9
+}
+
+[*] --> Idle : 初始化完成
+
+state "空闲\nIdle" as Idle #2ECC71 {
+}
+
+state "思考中\nThinking" as Thinking #F39C12 {
+  state "等待 LLM" as WaitLLM
+  state "流式输出" as Streaming
+  state "工具调用" as ToolCall
+
+  WaitLLM --> Streaming : 收到 chunk
+  Streaming --> Streaming : 更多 chunk
+  Streaming --> ToolCall : 检测到工具
+  ToolCall --> WaitLLM : 工具结果返回
+}
+
+state "暂停\nPaused" as Paused #9B59B6 {
+}
+
+state "错误\nError" as Error #E74C3C {
+}
+
+' 状态转换
+Idle --> Thinking : user_message\n/ emit(thinking_start)
+Thinking --> Idle : llm_complete\n/ emit(assistant_message)
+Thinking --> Error : llm_error\n/ emit(error)
+
+Idle --> Paused : pause()\n/ save_state
+Thinking --> Paused : pause()\n/ save_state
+Paused --> Idle : resume()\n/ restore_state
+Paused --> Thinking : resume()\n/ restore_state
+
+Error --> Idle : reset()\n/ clear_error
+
+Idle --> [*] : stop()
+Paused --> [*] : stop()
+
+note right of Thinking
+  **Mealy Machine 特点**
+  输出 = f(当前状态, 输入)
+
+  (Idle, user_msg) → (Thinking, [thinking_start])
+  (Thinking, chunk) → (Thinking, [text_delta])
+  (Thinking, tool_call) → (Thinking, [tool_start])
+  (Thinking, complete) → (Idle, [message_complete])
+end note
+
+note bottom of Paused
+  状态持久化支持
+  - 保存对话历史
+  - 保存工具上下文
+  - 支持断点续传
+end note
+
+@enduml

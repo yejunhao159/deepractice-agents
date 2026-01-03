@@ -1,0 +1,68 @@
+@startmindmap
+title Deepractice Agents 完整课程体系
+<style>
+mindmapDiagram {
+  :depth(0) { BackgroundColor #2C3E50; FontColor white; FontSize 20 }
+  :depth(1) { BackgroundColor #E74C3C; FontColor white; FontSize 16 }
+  :depth(2) { BackgroundColor #3498DB; FontColor white; FontSize 13 }
+  :depth(3) { BackgroundColor #27AE60; FontColor white; FontSize 11 }
+}
+</style>
+
+* 多智能体系统\n开发实战
+
+** 第一部分：基础篇
+*** 第1章 初识智能体
+**** 什么是智能体
+**** Agent Loop
+**** 应用生态
+*** 第2章 发展史
+**** 符号主义
+**** 心智社会
+**** LLM 时代
+*** 第3章 LLM 基础
+**** Transformer
+**** Prompt 工程
+**** 能力边界
+
+** 第二部分：Deepractice 生态
+*** 第4章 PromptX
+**** 语义鸿沟
+**** Nuwa/Luban
+**** Engram 记忆
+*** 第5章 AgentX
+**** 事件驱动
+**** Mealy Machine
+**** 系统集成
+*** 第6章 方法论
+**** 4P 理论
+**** PATEOAS
+**** AI 组织化
+
+left side
+
+** 第三部分：范式与实践
+*** 第7章 经典范式
+**** ReAct
+**** Plan-and-Solve
+**** Reflection
+*** 第8章 框架对比
+**** AutoGen
+**** LangGraph
+**** CrewAI
+*** 第9章 Monogent
+**** 七阶段管道
+**** 双基质模型
+
+** 第四部分：高级主题
+*** 第10章 上下文工程
+*** 第11章 工具使用
+*** 第12章 多智能体协作
+
+** 第五部分：实战项目
+*** 第13章 代码助手
+*** 第14章 知识问答
+*** 第15章 自动化工作流
+*** 第16章 总结展望
+
+@endmindmap

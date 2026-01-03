@@ -1,0 +1,130 @@
+@startmindmap
+title 第4章：PromptX 平台 - 知识全景图
+<style>
+mindmapDiagram {
+  :depth(0) {
+    BackgroundColor #2C3E50
+    FontColor white
+    FontSize 18
+  }
+  :depth(1) {
+    BackgroundColor #E74C3C
+    FontColor white
+    FontSize 14
+  }
+  :depth(2) {
+    BackgroundColor #3498DB
+    FontColor white
+    FontSize 12
+  }
+  :depth(3) {
+    BackgroundColor #27AE60
+    FontColor white
+    FontSize 11
+  }
+  :depth(4) {
+    BackgroundColor #F39C12
+    FontColor white
+    FontSize 10
+  }
+}
+</style>
+
+* PromptX\n智能体上下文平台
+
+** 4.1 五分钟体验
+*** 快速安装
+**** npx @promptx/cli
+**** MCP 配置
+*** 核心工具
+**** discover 发现
+***** 可用角色
+***** 可用工具
+**** action 激活
+***** 角色切换
+***** 能力加载
+**** recall 召回
+***** 记忆检索
+***** 联想激活
+**** remember 记忆
+***** 经验保存
+***** 知识积累
+
+** 4.2 语义鸿沟
+*** 定义
+**** AI 不知道但角色必须知道
+**** 预训练知识的盲区
+*** 四个识别测试
+**** Google 测试
+***** 能搜到 = 非鸿沟
+***** 搜不到 = 可能是鸿沟
+**** ChatGPT 测试
+***** AI 已知 = 非鸿沟
+***** AI 不知 = 是鸿沟
+**** 上下文测试
+***** 离开场景有意义 = 非鸿沟
+***** 场景特有 = 是鸿沟
+**** 特异性测试
+***** 通用知识 = 非鸿沟
+***** 私有知识 = 是鸿沟
+*** 填补策略
+**** 显式注入
+**** 动态加载
+**** 记忆召回
+
+left side
+
+** 4.3 Nuwa 角色创建
+*** 设计哲学
+**** 问题比身份重要
+**** 目的比工具重要
+**** 对话式共创
+*** ISSUE 范式
+**** Issue 问题探索
+**** Solution 方案设计
+**** Scenario 场景验证
+**** Unique 独特价值
+**** Evaluate 持续评估
+*** 角色四维度
+**** identity 身份
+**** expertise 专业能力
+**** principles 行为准则
+**** personality 个性特征
+*** 三层架构
+**** 思维层
+**** 执行层
+**** 知识层
+
+** 4.4 Luban 工具创建
+*** 核心理念
+**** AI 是用户
+**** 人类是指挥官
+**** 工具是 AI 的装备
+*** 设计原则
+**** 集成优于开发
+**** 连接优于创造
+**** 索引优于全文
+*** ToolX 协议
+**** 工具定义
+**** 参数声明
+**** 执行逻辑
+
+** 4.5 Engram 记忆网络
+*** 记忆痕迹结构
+**** content 内容
+**** schema 语义标签
+**** strength 强度
+**** type 类型
+***** ATOMIC 原子
+***** LINK 关系
+***** PATTERN 模式
+*** 语义网络
+**** Cue 节点
+**** 关联连接
+**** 激活扩散
+*** 认知循环
+**** recall 召回
+**** 思考处理
+**** remember 保存
+
+@endmindmap

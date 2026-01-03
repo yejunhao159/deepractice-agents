@@ -1,0 +1,77 @@
+@startuml
+title PromptX 认知循环 - recall → 思考 → remember
+
+skinparam backgroundColor #FEFEFE
+skinparam state {
+  BackgroundColor #3498DB
+  FontColor white
+}
+
+state "接收任务" as Start #2ECC71
+
+state "recall 召回" as Recall #E74C3C {
+  state "分析查询" as R1
+  state "激活网络" as R2
+  state "扩散传播" as R3
+  state "收集记忆" as R4
+
+  R1 --> R2 : 提取关键词
+  R2 --> R3 : 语义激活
+  R3 --> R4 : 相关记忆
+}
+
+state "思考处理" as Think #F39C12 {
+  state "整合上下文" as T1
+  state "LLM 推理" as T2
+  state "生成响应" as T3
+
+  T1 --> T2 : 记忆 + 输入
+  T2 --> T3 : 推理结果
+}
+
+state "remember 记忆" as Remember #9B59B6 {
+  state "提取要点" as M1
+  state "编码 Engram" as M2
+  state "更新网络" as M3
+
+  M1 --> M2 : content/schema
+  M2 --> M3 : 写入存储
+}
+
+state "返回结果" as End #2ECC71
+
+Start --> Recall : 用户输入
+Recall --> Think : 相关记忆
+Think --> Remember : 新知识
+Remember --> End : 完成
+End --> Start : 下一轮
+
+note right of Recall
+  **recall 参数**
+  - role: 角色ID
+  - query: 查询关键词
+  - mode: balanced/focused/creative
+end note
+
+note right of Remember
+  **Engram 结构**
+  - content: 原始内容
+  - schema: 语义标签
+  - strength: 0-1 强度
+  - type: ATOMIC/LINK/PATTERN
+end note
+
+note bottom of Think
+  **三种 Engram 类型**
+
+  ATOMIC: 原子概念
+  "用户使用 PostgreSQL 14"
+
+  LINK: 关系连接
+  "用户偏好 Prisma ORM"
+
+  PATTERN: 模式结构
+  "先优化索引，再分析执行计划"
+end note
+
+@enduml

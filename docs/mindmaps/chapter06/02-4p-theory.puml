@@ -1,0 +1,83 @@
+@startuml
+title 4P 理论 - 从模式到产品的转化链
+
+skinparam backgroundColor #FEFEFE
+
+rectangle "L1: Prompt Pattern\n提示词模式" as L1 #E74C3C {
+  card "ReAct 模式" as P1 #FADBD8
+  card "CoT 模式" as P2 #FADBD8
+  card "Reflection 模式" as P3 #FADBD8
+  card "Plan-and-Solve" as P4 #FADBD8
+
+  note bottom of L1
+    **特点**
+    - 最高抽象层级
+    - 跨领域通用
+    - 学术/社区共识
+    - 可复用模板
+  end note
+}
+
+rectangle "L2: Domain Prompt\n领域提示词" as L2 #F39C12 {
+  card "法律咨询模式" as D1 #FEF5E7
+  card "代码审查模式" as D2 #FEF5E7
+  card "医疗问诊模式" as D3 #FEF5E7
+  card "金融分析模式" as D4 #FEF5E7
+
+  note bottom of L2
+    **特点**
+    - 领域知识注入
+    - 行业术语适配
+    - 专业规范遵循
+    - 领域专家共创
+  end note
+}
+
+rectangle "L3: Scenario Project\n场景项目" as L3 #2ECC71 {
+  card "合同审查项目" as S1 #E8F8F5
+  card "PR Review项目" as S2 #E8F8F5
+  card "门诊助手项目" as S3 #E8F8F5
+  card "投研报告项目" as S4 #E8F8F5
+
+  note bottom of L3
+    **特点**
+    - 具体场景定制
+    - 多角色编排
+    - 工作流设计
+    - 团队协作模式
+  end note
+}
+
+rectangle "L4: Realization Product\n实现产品" as L4 #3498DB {
+  card "XX律所合同系统" as R1 #EBF5FB
+  card "YY公司代码平台" as R2 #EBF5FB
+  card "ZZ医院问诊系统" as R3 #EBF5FB
+  card "AA基金投研平台" as R4 #EBF5FB
+
+  note bottom of L4
+    **特点**
+    - 最终产品形态
+    - 完整工程实现
+    - 生产环境部署
+    - 用户可交付
+  end note
+}
+
+' 转化关系
+L1 -down-> L2 : **+ Domain**\n领域知识注入
+L2 -down-> L3 : **+ Scenario**\n场景定制
+L3 -down-> L4 : **+ Realization**\n工程实现
+
+' 反馈循环
+L4 -[dashed]up-> L3 : 就近反馈
+L3 -[dashed]up-> L2 : 向上提炼
+L2 -[dashed]up-> L1 : 元级沉淀
+
+legend right
+  |= 公式 |
+  | Pattern + Domain = Domain Prompt |
+  | Domain Prompt + Scenario = Project |
+  | Project + Realization = Product |
+end legend
+
+@enduml
